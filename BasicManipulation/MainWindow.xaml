@@ -1,0 +1,61 @@
+﻿<Window x:Name="mainWindow" x:Class="BasicManipulation.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="UoA Faculty of Engineering - Career Path"
+        WindowState="Maximized"
+        Height="1086" Width="1920" ResizeMode="NoResize" Background="White" WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True">
+    <Window.Resources>
+
+        <!--The movement, rotation, and size of the Rectangle is 
+        specified by its RenderTransform.-->
+        <MatrixTransform x:Key="InitialMatrixTransform">
+            <MatrixTransform.Matrix>
+                <Matrix OffsetX="200" OffsetY="200"/>
+            </MatrixTransform.Matrix>
+        </MatrixTransform>
+
+    </Window.Resources>
+    <Window.Effect>
+        <DropShadowEffect/>
+    </Window.Effect>
+
+    <Canvas Background="#FF95BBF1" HorizontalAlignment="Center">
+        <Button x:Name="startButton" Canvas.Left="-153" Canvas.Top="862" Width="306" Height="132" FontFamily="Century Gothic" FontSize="25" FontWeight="Medium" Click="startButton_Click">
+            <Button.Template>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid>
+                        <Ellipse Stroke="Black"
+                					StrokeThickness=".1">
+                            <Ellipse.Fill>
+                                <RadialGradientBrush GradientOrigin="0.498,0.526">
+                                    <RadialGradientBrush.RelativeTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1" ScaleY="1.997"/>
+                                            <TranslateTransform X="0" Y="0.5"/>
+                                        </TransformGroup>
+                                    </RadialGradientBrush.RelativeTransform>
+                                    <GradientStop Color="#FFF3F3F3" Offset="0"/>
+                                    <GradientStop Color="#FFEBEBEB" Offset="0.5"/>
+                                    <GradientStop Color="#FFDDDDDD" Offset="0.5"/>
+                                    <GradientStop Color="#FF94C4E0" Offset="1"/>
+                                </RadialGradientBrush>
+                            </Ellipse.Fill>
+                        </Ellipse>
+                        <ContentPresenter HorizontalAlignment="Center"
+                					VerticalAlignment="Center"/>
+                    </Grid>
+                </ControlTemplate>
+            </Button.Template>
+            <Button.Effect>
+                <DropShadowEffect ShadowDepth="10"/>
+            </Button.Effect>
+            <TextBlock TextAlignment="Center" Text="Learn more" FontWeight="Medium"/>
+        </Button>
+        <TextBlock x:Name="welcomeTextBlock" Height="280" Canvas.Left="-762" TextWrapping="Wrap" Canvas.Top="502" Width="1525" FontSize="72" FontFamily="Century Gothic" TextAlignment="Center" TextDecorations="{x:Null}" Foreground="Black" Text="Welcome to the University of Auckland Department of Electrical and Computer Engineering">
+            <TextBlock.Effect>
+                <DropShadowEffect/>
+            </TextBlock.Effect>
+        </TextBlock>
+        <Image Height="354" Canvas.Left="-174" Source="logo.png" Stretch="Fill" Canvas.Top="72" Width="345"/>
+    </Canvas>
+</Window>

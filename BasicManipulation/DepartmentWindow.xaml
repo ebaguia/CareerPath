@@ -1,0 +1,307 @@
+﻿<Window x:Name="departmentWindow" x:Class="BasicManipulation.DepartmentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="UoA Faculty of Engineering - Career Path" Height="1082" Width="1920" WindowState="Maximized" WindowStartupLocation="CenterScreen" WindowStyle="None" Background="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AllowsTransparency="True">
+    <Window.Effect>
+        <DropShadowEffect/>
+    </Window.Effect>
+    <Window.Resources>
+        <Style TargetType="ScrollBar">
+            <Setter Property="Width" Value="40"/>
+        </Style>
+    </Window.Resources>
+    <DockPanel x:Name="dockPanel" Height="1086" LastChildFill="False" Canvas.Left="-4" Width="1914">
+        <Canvas x:Name="headerCanvass" Height="162" VerticalAlignment="Top" DockPanel.Dock="Top" Margin="0,0,0,0">
+            <Canvas.Effect>
+                <DropShadowEffect/>
+            </Canvas.Effect>
+            <Canvas.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black" Offset="1"/>
+                    <GradientStop Color="#FF813BB2" Offset="0.867"/>
+                </LinearGradientBrush>
+            </Canvas.Background>
+            <Image Height="152" VerticalAlignment="Bottom" Source="FacultyEngineeringLogo.png" Width="396"/>
+            <TextBlock Canvas.Left="401" TextWrapping="Wrap" Canvas.Top="10" Height="132" Width="1503" FontWeight="Medium" FontFamily="Century Gothic" FontSize="55" Text="Department of Electrical And Computer Engineering &quot;Using technology for humanity&quot;" Foreground="White" TextAlignment="Center">
+            </TextBlock>
+        </Canvas>
+        <StackPanel x:Name="buttonsStackPanel" Margin="0,5,0,0" Width="284" DockPanel.Dock="Left" Height="919" VerticalAlignment="Top">
+            <StackPanel x:Name="departmentPanel" HorizontalAlignment="Left" Height="912" Width="288" Margin="0,0,-4,0">
+                <TextBlock TextWrapping="Wrap" Height="78" FontWeight="Medium" FontFamily="Century Gothic" FontSize="30" TextAlignment="Center" Text="Options" Foreground="White" Padding="10">
+                    <TextBlock.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="Black" Offset="1"/>
+                            <GradientStop Color="#FF813BB2" Offset="0.867"/>
+                        </LinearGradientBrush>
+                    </TextBlock.Background>
+                    <TextBlock.Effect>
+                        <DropShadowEffect/>
+                    </TextBlock.Effect></TextBlock>
+                <Button x:Name="careerPathwayButton" Height="102" Margin="10,20,0,0" FontFamily="Century Gothic" FontSize="25" FontWeight="Medium" HorizontalAlignment="Left" Width="263" Click="careerPathwayButton_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid>
+                                <Ellipse Stroke="Black"
+                					StrokeThickness=".1">
+                                    <Ellipse.Fill>
+                                        <RadialGradientBrush GradientOrigin="0.498,0.526">
+                                            <RadialGradientBrush.RelativeTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1" ScaleY="1.997"/>
+                                                    <TranslateTransform X="0" Y="0.5"/>
+                                                </TransformGroup>
+                                            </RadialGradientBrush.RelativeTransform>
+                                            <GradientStop Color="#FFF3F3F3" Offset="0"/>
+                                            <GradientStop Color="#FFEBEBEB" Offset="0.5"/>
+                                            <GradientStop Color="#FFDDDDDD" Offset="0.5"/>
+                                            <GradientStop Color="#FF94C4E0" Offset="1"/>
+                                        </RadialGradientBrush>
+                                    </Ellipse.Fill>
+                                </Ellipse>
+                                <ContentPresenter HorizontalAlignment="Center"
+                					VerticalAlignment="Center"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Effect>
+                        <DropShadowEffect/>
+                    </Button.Effect>
+                    <TextBlock TextAlignment="Center" FontWeight="Medium" Text="Careers"></TextBlock>
+                </Button>
+                <Button x:Name="programmesButton" HorizontalAlignment="Left" Height="102" Margin="10,30,0,0" Width="263" FontFamily="Century Gothic" FontSize="25" FontWeight="Medium" Click="programmesButton_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid>
+                                <Ellipse Stroke="Black"
+                					StrokeThickness=".1">
+                                    <Ellipse.Fill>
+                                        <RadialGradientBrush GradientOrigin="0.498,0.526">
+                                            <RadialGradientBrush.RelativeTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1" ScaleY="1.997"/>
+                                                    <TranslateTransform X="0" Y="0.5"/>
+                                                </TransformGroup>
+                                            </RadialGradientBrush.RelativeTransform>
+                                            <GradientStop Color="#FFF3F3F3" Offset="0"/>
+                                            <GradientStop Color="#FFEBEBEB" Offset="0.5"/>
+                                            <GradientStop Color="#FFDDDDDD" Offset="0.5"/>
+                                            <GradientStop Color="#FF94C4E0" Offset="1"/>
+                                        </RadialGradientBrush>
+                                    </Ellipse.Fill>
+                                </Ellipse>
+                                <ContentPresenter HorizontalAlignment="Center"
+                					VerticalAlignment="Center"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Effect>
+                        <DropShadowEffect/>
+                    </Button.Effect>
+                    <TextBlock TextAlignment="Center" FontWeight="Medium" Text="Programmes"></TextBlock>
+                </Button>
+                <Button x:Name="coursesButton" HorizontalAlignment="Left" Height="102" Margin="10,30,0,0" Width="263" FontFamily="Century Gothic" FontSize="25" FontWeight="Medium" Click="coursesButton_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid>
+                                <Ellipse Stroke="Black"
+                					StrokeThickness=".1">
+                                    <Ellipse.Fill>
+                                        <RadialGradientBrush GradientOrigin="0.498,0.526">
+                                            <RadialGradientBrush.RelativeTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1" ScaleY="1.997"/>
+                                                    <TranslateTransform X="0" Y="0.5"/>
+                                                </TransformGroup>
+                                            </RadialGradientBrush.RelativeTransform>
+                                            <GradientStop Color="#FFF3F3F3" Offset="0"/>
+                                            <GradientStop Color="#FFEBEBEB" Offset="0.5"/>
+                                            <GradientStop Color="#FFDDDDDD" Offset="0.5"/>
+                                            <GradientStop Color="#FF94C4E0" Offset="1"/>
+                                        </RadialGradientBrush>
+                                    </Ellipse.Fill>
+                                </Ellipse>
+                                <ContentPresenter HorizontalAlignment="Center"
+                					VerticalAlignment="Center"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Effect>
+                        <DropShadowEffect/>
+                    </Button.Effect>
+                    <TextBlock TextAlignment="Center" FontWeight="Medium" Text="Courses"/>
+                </Button>
+                <Button x:Name="homeButton" Margin="10,30,0,0" HorizontalAlignment="Left" Height="102" Width="263" FontFamily="Century Gothic" FontSize="25" FontWeight="Medium" Click="homeButton_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid>
+                                <Ellipse Stroke="Black"
+                        			StrokeThickness=".1">
+                                    <Ellipse.Fill>
+                                        <RadialGradientBrush GradientOrigin="0.498,0.526">
+                                            <RadialGradientBrush.RelativeTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1" ScaleY="1.997"/>
+                                                    <TranslateTransform X="0" Y="0.5"/>
+                                                </TransformGroup>
+                                            </RadialGradientBrush.RelativeTransform>
+                                            <GradientStop Color="#FFF3F3F3" Offset="0"/>
+                                            <GradientStop Color="#FFEBEBEB" Offset="0.5"/>
+                                            <GradientStop Color="#FFDDDDDD" Offset="0.5"/>
+                                            <GradientStop Color="#FF94C4E0" Offset="1"/>
+                                        </RadialGradientBrush>
+                                    </Ellipse.Fill>
+                                </Ellipse>
+                                <ContentPresenter HorizontalAlignment="Center"
+                        			VerticalAlignment="Center"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Effect>
+                        <DropShadowEffect/>
+                    </Button.Effect>
+                    <TextBlock TextAlignment="Center" FontWeight="Medium" Text="HOME"/>
+                </Button>
+
+            </StackPanel>
+        </StackPanel>
+        <Canvas x:Name="rightDisplayPanel" Height="919" VerticalAlignment="Top" Width="1625" Margin="5,5,0,0">
+            <TextBlock x:Name="eceWelcomeTextBlock" Height="834" Width="844" FontFamily="Century Gothic" FontSize="25" FontWeight="Medium" TextAlignment="Justify" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Padding="10" Canvas.Top="85">
+            </TextBlock>
+            <TreeView x:Name="careerTreeView" Height="836" Canvas.Top="83" Width="844" FontWeight="Medium" FontFamily="Century Gothic" FontSize="25" SelectedItemChanged="careerTreeView_SelectedItemChanged" Background="{x:Null}" BorderThickness="0.5,0.5,0.5,0"/>
+            <TreeView x:Name="programmeTreeView" Height="836" Canvas.Top="83" Width="844" FontWeight="Medium" FontFamily="Century Gothic" FontSize="25" SelectedItemChanged="programmeTreeView_SelectedItemChanged" Background="{x:Null}" BorderThickness="0.5,0.5,0.5,0"/>
+            <TextBlock x:Name="careerLabel" Height="78" TextWrapping="Wrap" Text="Want to work in these existing fields?" Width="844" FontWeight="Medium" FontFamily="Century Gothic" FontSize="30" TextAlignment="Center" Foreground="White" Padding="10">
+                <TextBlock.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="1"/>
+                        <GradientStop Color="#FF813BB2" Offset="0.867"/>
+                    </LinearGradientBrush>
+                </TextBlock.Background>
+                <TextBlock.Effect>
+                    <DropShadowEffect/>
+                </TextBlock.Effect>
+            </TextBlock>
+            <TextBlock x:Name="programmeToStudy" Height="78" TextWrapping="Wrap" Text="Study this ECE degree now!" Width="776" FontWeight="Medium" FontFamily="Century Gothic" FontSize="30" TextAlignment="Center" Canvas.Left="849" Foreground="White" Padding="10">
+                <TextBlock.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="1"/>
+                        <GradientStop Color="#FF813BB2" Offset="0.867"/>
+                    </LinearGradientBrush>
+                </TextBlock.Background>
+                <TextBlock.Effect>
+                    <DropShadowEffect/>
+                </TextBlock.Effect>
+            </TextBlock>
+            <TextBlock x:Name="cseLabel" Height="78" TextWrapping="Wrap" Text="CSE" Width="541" FontWeight="Medium" FontFamily="Century Gothic" FontSize="30" TextAlignment="Center" Foreground="White" Padding="10">
+                <TextBlock.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="1"/>
+                        <GradientStop Color="#FF813BB2" Offset="0.867"/>
+                    </LinearGradientBrush>
+                </TextBlock.Background>
+                <TextBlock.Effect>
+                    <DropShadowEffect/>
+                </TextBlock.Effect>
+            </TextBlock>
+            <TextBlock x:Name="eeeLabel" Height="78" TextWrapping="Wrap" Text="EEE" Width="541" FontWeight="Medium" FontFamily="Century Gothic" FontSize="30" TextAlignment="Center" Canvas.Left="545" Foreground="White" Padding="10">
+                <TextBlock.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="1"/>
+                        <GradientStop Color="#FF813BB2" Offset="0.867"/>
+                    </LinearGradientBrush>
+                </TextBlock.Background>
+                <TextBlock.Effect>
+                    <DropShadowEffect/>
+                </TextBlock.Effect>
+            </TextBlock>
+            <TextBlock x:Name="seLabel" Height="78" TextWrapping="Wrap" Text="SE" Width="541" FontWeight="Medium" FontFamily="Century Gothic" FontSize="30" TextAlignment="Center" Canvas.Left="1090" Foreground="White" Padding="10">
+                <TextBlock.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="1"/>
+                        <GradientStop Color="#FF813BB2" Offset="0.867"/>
+                    </LinearGradientBrush>
+                </TextBlock.Background>
+                <TextBlock.Effect>
+                    <DropShadowEffect/>
+                </TextBlock.Effect>
+            </TextBlock>
+            <Canvas x:Name="programmeToStudyCanvass" Height="834" Canvas.Left="849" Canvas.Top="85" Width="776">
+                <TextBlock x:Name="programmeToStudyTextBlock" Height="834" Width="776" FontFamily="Century Gothic" FontSize="25" FontWeight="Medium" TextAlignment="Justify" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Padding="10"/>
+                <Button x:Name="learnMoreFromCareer" HorizontalAlignment="Left" Height="102" Width="263" FontFamily="Century Gothic" FontSize="25" FontWeight="Medium" Canvas.Left="292" Canvas.Top="722" Click="learnMoreFromCareer_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid Margin="0,0,40,34">
+                                <Ellipse Stroke="Black"
+                        			StrokeThickness=".1">
+                                    <Ellipse.Fill>
+                                        <RadialGradientBrush GradientOrigin="0.498,0.526">
+                                            <RadialGradientBrush.RelativeTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1" ScaleY="1.997"/>
+                                                    <TranslateTransform X="0" Y="0.5"/>
+                                                </TransformGroup>
+                                            </RadialGradientBrush.RelativeTransform>
+                                            <GradientStop Color="#FFF3F3F3" Offset="0"/>
+                                            <GradientStop Color="#FFEBEBEB" Offset="0.5"/>
+                                            <GradientStop Color="#FFDDDDDD" Offset="0.5"/>
+                                            <GradientStop Color="#FF94C4E0" Offset="1"/>
+                                        </RadialGradientBrush>
+                                    </Ellipse.Fill>
+                                </Ellipse>
+                                <ContentPresenter HorizontalAlignment="Center"
+                        			VerticalAlignment="Center"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Effect>
+                        <DropShadowEffect/>
+                    </Button.Effect>
+                    <TextBlock TextAlignment="Center" FontWeight="Medium" Text="Learn More"/>
+                </Button>
+            </Canvas>
+            <Button x:Name="learnMoreFromProgramme" HorizontalAlignment="Left" Height="102" Width="263" FontFamily="Century Gothic" FontSize="25" FontWeight="Medium" Canvas.Left="1142" Canvas.Top="807" Click="learnMoreFromProgramme_Click">
+                <Button.Template>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid Margin="0,0,40,34">
+                            <Ellipse Stroke="Black"
+                        			StrokeThickness=".1">
+                                <Ellipse.Fill>
+                                    <RadialGradientBrush GradientOrigin="0.498,0.526">
+                                        <RadialGradientBrush.RelativeTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1" ScaleY="1.997"/>
+                                                <TranslateTransform X="0" Y="0.5"/>
+                                            </TransformGroup>
+                                        </RadialGradientBrush.RelativeTransform>
+                                        <GradientStop Color="#FFF3F3F3" Offset="0"/>
+                                        <GradientStop Color="#FFEBEBEB" Offset="0.5"/>
+                                        <GradientStop Color="#FFDDDDDD" Offset="0.5"/>
+                                        <GradientStop Color="#FF94C4E0" Offset="1"/>
+                                    </RadialGradientBrush>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <ContentPresenter HorizontalAlignment="Center"
+                        			VerticalAlignment="Center"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Button.Template>
+                <Button.Effect>
+                    <DropShadowEffect/>
+                </Button.Effect>
+                <TextBlock TextAlignment="Center" FontWeight="Medium" Text="Learn More"/>
+            </Button>
+            <Grid Name="coursesGrid" Height="836" Canvas.Top="83" Width="1625">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TreeView x:Name="cseTreeView" Height="836" Width="542" Grid.Row="0" Grid.Column="0" FontWeight="Medium" FontFamily="Century Gothic" FontSize="25" Background="{x:Null}" BorderThickness="0.5,0.5,0.5,0" SelectedItemChanged="cseTreeView_SelectedItemChanged" Padding="1,1,1,25"/>
+                <TreeView x:Name="eeeTreeView" Height="836" Width="542" Grid.Row="0" Grid.Column="1" FontWeight="Medium" FontFamily="Century Gothic" FontSize="25" Background="{x:Null}" BorderThickness="0.5,0.5,0.5,0" SelectedItemChanged="eeeTreeView_SelectedItemChanged" Padding="1,1,1,25" />
+                <TreeView x:Name="seTreeView" Height="836" Width="542" Grid.Row="0" Grid.Column="2" FontWeight="Medium" FontFamily="Century Gothic" FontSize="25" Background="{x:Null}" BorderThickness="0.5,0.5,0.5,0" SelectedItemChanged="seTreeView_SelectedItemChanged" Padding="1,1,1,25"/>
+            </Grid>
+        </Canvas>
+    </DockPanel>
+</Window>
