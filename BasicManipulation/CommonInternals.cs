@@ -24,7 +24,7 @@ namespace BasicManipulation
 
         public enum CourseYear
         {
-            FIRST_YEAR,
+            FIRST_YEAR = 0,
             SECOND_YEAR,
             THIRD_YEAR,
             FOURTH_YEAR
@@ -50,7 +50,8 @@ namespace BasicManipulation
         public const String MORE_TXT = "More>>>";
         public const String PREV_TXT = "<<<Prev";
         public const String CAREER_PATH_TXT = CAREER_TXT + PATH_TXT;
-        public const String ECE_CAREERS_HEADER_TXT = "ECE - Using technology for humanity";
+        public const String ECE_DEPARTMENT_NAME = "Department of Electrical and Computer Engineering";
+        public const String ECE_CAREERS_HEADER_TXT = "\"Using technology for humanity\"";
         public const String DB_NAME = "CareerPath.db";
         public const String ECE_HEADER1 = "Why study ECE at The University of Auckland?";
         public const String ECE_HEADER2 = "What is Electrical and Computer Engineering?";

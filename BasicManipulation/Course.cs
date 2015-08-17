@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Effects;
 using System.Windows;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace BasicManipulation
 {
@@ -63,7 +64,7 @@ namespace BasicManipulation
         {
             courseButton = new Button();
             courseButton.Height = 80;
-            courseButton.Width = 170;
+            courseButton.Width = 180;
             courseButton.Content = "Course: " + id + "\nSemester: " + sem + "\nPoints: " + points;
             courseButton.BorderBrush = Brushes.Black;
             courseButton.BorderThickness = new System.Windows.Thickness(0);
@@ -91,27 +92,7 @@ namespace BasicManipulation
 
             if (programmeWindow != null)
             {
-                // Display purpose only
-                //
-                List<Course> preReqList = DatabaseConnection.getPrerequisiteCourses(id);
-                String preReqString = "";
-                foreach (Course preReqCourse in preReqList)
-                {
-                    preReqString += preReqCourse.id + ";";
-                }
-
-                List<Course> restrList = DatabaseConnection.getRestrictionCourses(id);
-                String restrString = "";
-                foreach (Course restrCourse in restrList)
-                {
-                    restrString += restrCourse.id + ";";
-                }
-
-                programmeWindow.courseInfoDataGrid.Items.Clear();
-                programmeWindow.courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Course", description = id });
-                programmeWindow.courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Description", description = description });
-                programmeWindow.courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Prerequisite(s)", description = preReqString });
-                programmeWindow.courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Restrictions(s)", description = restrString });
+                Utilities.fillCourseInfoDataGrid(programmeWindow.courseInfoDataGrid, this);
             }
         }
 

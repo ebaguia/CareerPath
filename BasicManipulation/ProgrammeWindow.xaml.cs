@@ -33,6 +33,8 @@ namespace BasicManipulation
 
         private void initialise()
         {
+            String eceHeaderText = CommonInternals.ECE_DEPARTMENT_NAME + "\n" + CommonInternals.ECE_CAREERS_HEADER_TXT;
+
             for (int i = 0; i < collectionOflistOfY.Length; i++)
             {
                 collectionOflistOfY[i] = new List<double>();
@@ -41,6 +43,7 @@ namespace BasicManipulation
             if (departmentWindow.isSetCareer)
             {
                 setSelectedCareer();
+                eceHeaderText = CommonInternals.ECE_DEPARTMENT_NAME + "\n" + "\"" + departmentWindow.selectedCareer.name + "\"";
             }
             else if(departmentWindow.isSetCourse)
             {
@@ -50,6 +53,8 @@ namespace BasicManipulation
             {
                 setSelectedProgramme();
             }
+
+            departmentHeaderLabel.Text = eceHeaderText;
         }
 
         private void backButton_Click(object sender, RoutedEventArgs e)
@@ -171,7 +176,7 @@ namespace BasicManipulation
 
         private void setSelectedCareer()
         {
-            List<String> finalCoursesToTake = DatabaseConnection.readCareerFinalCourses(departmentWindow.selectedCareer);
+            List<Course> finalCoursesToTake = DatabaseConnection.readCareerFinalCourses(departmentWindow.selectedCareer);
             TreeViewItem[] finalCoursesItems = new TreeViewItem[finalCoursesToTake.Count];
 
             // Clear tree before repopulating
@@ -209,7 +214,7 @@ namespace BasicManipulation
                 Button btn = new Button();
                 btn.Height = CommonInternals.TREE_COURSE_BUTTON_HEIGHT;
                 btn.Width = CommonInternals.TREE_COURSE_BUTTON_WIDTH;
-                btn.Content = finalCoursesToTake.ElementAt(i);
+                btn.Content = finalCoursesToTake.ElementAt(i).id;
                 btn.Click += courseItemAction;
 
 
@@ -298,33 +303,21 @@ namespace BasicManipulation
             //
             try
             {
-                // Display purpose only
-                //
-                List<Course> preReq = DatabaseConnection.getPrerequisiteCourses(button.Content.ToString());
-                String preReqString = "";
-                foreach (Course preReqCourse in preReq)
+                Course targetCourse = DatabaseConnection.getCourse(button.Content.ToString());
+                if (targetCourse != null)
                 {
-                    preReqString += preReqCourse.id + ";";
+                    Utilities.fillCourseInfoDataGrid(courseInfoDataGrid, targetCourse);
+
+                    List<Course> relatedPreReq = DatabaseConnection.generateAllRelatedPreRequisites(targetCourse);
+                    relatedPreReq.Insert(0, targetCourse);
+                    foreach (Course course in relatedPreReq)
+                    {
+                        setCoursePath(course.id);
+                    }
                 }
-
-                List<Course> restrList = DatabaseConnection.getRestrictionCourses(button.Content.ToString());
-                String restrString = "";
-                foreach (Course restrCourse in restrList)
+                else
                 {
-                    restrString += restrCourse.id + ";";
-                }
-
-                courseInfoDataGrid.Items.Clear();
-                courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Course", description = DatabaseConnection.getCourse(button.Content.ToString()).id });
-                courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Description", description = DatabaseConnection.getCourse(button.Content.ToString()).description });
-                courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Prerequisite(s)", description = preReqString });
-                courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Restrictions(s)", description = restrString });
-
-                List<Course> relatedPreReq = DatabaseConnection.generateAllRelatedPreRequisites(button.Content.ToString());
-                relatedPreReq.Insert(0, DatabaseConnection.getCourse(button.Content.ToString()));
-                foreach (Course course in relatedPreReq)
-                {
-                    setCoursePath(course.id);
+                    Logger.Error("ProgrammeWindow::courseItemAction() Target Course could not be found in the database.");
                 }
             }
             catch(Exception ex)
@@ -360,35 +353,23 @@ namespace BasicManipulation
 
                 if (!departmentWindow.isSetProgramme)
                 {
-                    // Display purpose only
-                    //
-                    List<Course> preReq = DatabaseConnection.getPrerequisiteCourses(courseButton.Content.ToString());
-                    String preReqString = "";
-                    foreach (Course preReqCourse in preReq)
+                    Course targetCourse = DatabaseConnection.getCourse(courseButton.Content.ToString());
+                    if (targetCourse != null)
                     {
-                        preReqString += preReqCourse.id + ";";
+                        Utilities.fillCourseInfoDataGrid(courseInfoDataGrid, targetCourse);
+
+                        // Draw the course path
+                        //
+                        List<Course> relatedPreReq = DatabaseConnection.generateAllRelatedPreRequisites(targetCourse);
+                        relatedPreReq.Insert(0, targetCourse);
+                        foreach (Course course in relatedPreReq)
+                        {
+                            setCoursePath(course.id);
+                        }
                     }
-
-                    List<Course> restrList = DatabaseConnection.getRestrictionCourses(courseButton.Content.ToString());
-                    String restrString = "";
-                    foreach (Course restrCourse in restrList)
+                    else
                     {
-                        restrString += restrCourse.id + ";";
-                    }
-
-                    courseInfoDataGrid.Items.Clear();
-                    courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Course", description = DatabaseConnection.getCourse(courseButton.Content.ToString()).id });
-                    courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Description", description = DatabaseConnection.getCourse(courseButton.Content.ToString()).description });
-                    courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Prerequisite(s)", description = preReqString });
-                    courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Restrictions(s)", description = restrString });
-
-                    // Draw the course path
-                    //
-                    List<Course> relatedPreReq = DatabaseConnection.generateAllRelatedPreRequisites(courseButton.Content.ToString());
-                    relatedPreReq.Insert(0, DatabaseConnection.getCourse(courseButton.Content.ToString()));
-                    foreach (Course course in relatedPreReq)
-                    {
-                        setCoursePath(course.id);
+                        Logger.Error("ProgrammeWindow::treeView_SelectedItemChanged() Target Course could not be found in the database.");
                     }
                 }
             }
@@ -417,10 +398,10 @@ namespace BasicManipulation
 
             // First sem courses should be in the left
             //
-            double year4StartXLocation1 = coursePathCanvas.Width - ((coursePathCanvas.Width / 4) - 100) - 25;
-            double year3StartXLocation1 = coursePathCanvas.Width - (((coursePathCanvas.Width / 4) * 2) - 100) - 25;
-            double year2StartXLocation1 = coursePathCanvas.Width - (((coursePathCanvas.Width / 4) * 3) - 100) - 25;
-            double year1StartXLocation1 = coursePathCanvas.Width - (coursePathCanvas.Width - 100) - 25;
+            double year4StartXLocation1 = coursePathCanvas.Width - ((coursePathCanvas.Width / 4) - 100) - 35;
+            double year3StartXLocation1 = coursePathCanvas.Width - (((coursePathCanvas.Width / 4) * 2) - 100) - 35;
+            double year2StartXLocation1 = coursePathCanvas.Width - (((coursePathCanvas.Width / 4) * 3) - 100) - 35;
+            double year1StartXLocation1 = coursePathCanvas.Width - (coursePathCanvas.Width - 100) - 35;
 
             // Second sem courses should be in the left
             //
@@ -436,7 +417,16 @@ namespace BasicManipulation
                 // Populating the top most course
                 //
                 double previousStartX = 0;
-                double previousStartY = CommonInternals.COURSE_BUTTON_GAP; // start from the Top of the Canvas
+                double previousStartY = CommonInternals.COURSE_BUTTON_GAP;
+                Course existingCourse = getCourseFromCanvas(topCourse);
+
+                // Start from the previous and existing course
+                //
+                if (existingCourse != null)
+                {
+                    previousStartY = Canvas.GetLeft(existingCourse.courseButton);
+                }
+
                 if (topCourse.year == 4)
                 {
                     if (topCourse.sem == 1)
@@ -457,7 +447,8 @@ namespace BasicManipulation
                         //
                         previousStartX = year4StartXLocation2 - 25;
                     }
-                    for (int i = 0; isCoursePointYExist(previousStartY, collectionOflistOfY[(int)CommonInternals.CourseYear.FOURTH_YEAR]) == true; i++)
+
+                    for (int i = 0; isCoursePointYExist(previousStartY, collectionOflistOfY[(int)CommonInternals.CourseYear.FOURTH_YEAR]); i++)
                     {
                         previousStartY += topCourse.courseButton.Height + CommonInternals.COURSE_BUTTON_GAP;
                     }
@@ -477,6 +468,7 @@ namespace BasicManipulation
                     {
                         previousStartX = year3StartXLocation2 - 25;
                     }
+
                     for (int i = 0; isCoursePointYExist(previousStartY, collectionOflistOfY[(int)CommonInternals.CourseYear.THIRD_YEAR]) == true; i++)
                     {
                         previousStartY += topCourse.courseButton.Height + CommonInternals.COURSE_BUTTON_GAP;
@@ -497,6 +489,7 @@ namespace BasicManipulation
                     {
                         previousStartX = year2StartXLocation2 - 25;
                     }
+
                     for (int i = 0; isCoursePointYExist(previousStartY, collectionOflistOfY[(int)CommonInternals.CourseYear.SECOND_YEAR]) == true; i++)
                     {
                         previousStartY += topCourse.courseButton.Height + CommonInternals.COURSE_BUTTON_GAP;
@@ -517,6 +510,7 @@ namespace BasicManipulation
                     {
                         previousStartX = year1StartXLocation2 - 25;
                     }
+
                     for (int i = 0; isCoursePointYExist(previousStartY, collectionOflistOfY[(int)CommonInternals.CourseYear.FIRST_YEAR]) == true; i++)
                     {
                         previousStartY += topCourse.courseButton.Height + CommonInternals.COURSE_BUTTON_GAP;
@@ -524,7 +518,6 @@ namespace BasicManipulation
                     collectionOflistOfY[(int)CommonInternals.CourseYear.FIRST_YEAR].Add(previousStartY);
                 }
 
-                Course existingCourse = getCourseFromCanvas(topCourse);
                 if (existingCourse == null)
                 {
                     coursePathCanvas.Children.Add(topCourse.courseButton);
@@ -554,6 +547,7 @@ namespace BasicManipulation
                     Course course = courses.ElementAt(i);
                     course.setType(getCourseType(course));
 
+                    previousStartY = CommonInternals.COURSE_BUTTON_GAP;
                     Course existingCourse2 = getCourseFromCanvas(course);
                     if (existingCourse2 == null)
                     {
@@ -589,12 +583,18 @@ namespace BasicManipulation
                                 previousStartX = year3StartXLocation2;
                             }
 
+                            foreach(double y in collectionOflistOfY[(int)CommonInternals.CourseYear.THIRD_YEAR])
+                            {
+                                Logger.Debug("ACHTUNG listOfY: " + y);
+                            }
+
                             // this course goes below
                             //
                             while (isCoursePointYExist(previousStartY, collectionOflistOfY[(int)CommonInternals.CourseYear.THIRD_YEAR]))
                             {
                                 previousStartY += course.courseButton.Height + CommonInternals.COURSE_BUTTON_GAP;
                             }
+                            Logger.Debug("ACHTUNG PreReqCourse Y ADD[" + course.id + "] Y: " + previousStartY);
                             collectionOflistOfY[(int)CommonInternals.CourseYear.THIRD_YEAR].Add(previousStartY);
                         }
                         else if (course.year == 2)
@@ -649,6 +649,7 @@ namespace BasicManipulation
                         course = existingCourse2;
                     }
 
+                    Logger.Debug("ACHTUNG PreReqCourse[" + course.id + "] Y: " + previousStartY);
                     Point relativePointEllipse1 = new Point(previousStartX + (topcourseButtonRect.Width), previousStartY + (topcourseButtonRect.Height / 2));
 
                     if (topCourse.year != course.year)

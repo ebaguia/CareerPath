@@ -21,6 +21,7 @@ namespace BasicManipulation
     public partial class DepartmentWindow : Window
     {
         private MainWindow mainWindow = null;
+        private Image[] careerImages = null;
         public Career selectedCareer { get; set; }
         public Course selectedCourse { get; set; }
         public Programme selectedProgramme { get; set; }
@@ -39,7 +40,7 @@ namespace BasicManipulation
             // Let's hide the components on the right for now
             //
             careerLabel.Text = CommonInternals.ECE_HEADER1;
-            programmeToStudy.Text = CommonInternals.ECE_HEADER2;
+            programmeToStudyLabel.Text = CommonInternals.ECE_HEADER2;
             eceWelcomeTextBlock.Text = CommonInternals.ECE_LABEL1;
             programmeToStudyTextBlock.Text = CommonInternals.ECE_LABEL2;
             learnMoreFromCareer.Visibility = Visibility.Collapsed;
@@ -50,6 +51,7 @@ namespace BasicManipulation
             cseLabel.Visibility = Visibility.Collapsed;
             eeeLabel.Visibility = Visibility.Collapsed;
             seLabel.Visibility = Visibility.Collapsed;
+            finalCoursesGrid.Visibility = Visibility.Collapsed;
             
             careers = new List<Career>();
             programmes = new List<Programme>();
@@ -62,6 +64,16 @@ namespace BasicManipulation
             isSetCareer = false;
             isSetCourse = false;
             isSetProgramme = false;
+
+            departmentHeaderLabel.Text = CommonInternals.ECE_DEPARTMENT_NAME + "\n" + CommonInternals.ECE_CAREERS_HEADER_TXT;
+
+            careerImages = new Image[6];
+            careerImages[0] = highPowerElectronics;
+            careerImages[1] = applicationDev;
+            careerImages[2] = careerDefault;
+            careerImages[3] = renewableEnergy;
+            careerImages[4] = robotics;
+            careerImages[5] = wirelessCommunication;
         }
 
         private void homeButton_Click(object sender, RoutedEventArgs e)
@@ -97,13 +109,12 @@ namespace BasicManipulation
 
                 // create Image
                 Image image = new Image();
-                image.Source = new BitmapImage(new Uri("C:\\Users\\ebag753\\Documents\\Visual Studio 2013\\Projects\\BasicManipulation\\BasicManipulation\\bin\\Debug\\careers_icon.png", UriKind.RelativeOrAbsolute));
+                image.Source = new BitmapImage(new Uri(BasicManipulation.Properties.Resources.careersIcon));
 
                 // Label
                 //
                 Label lbl = new Label();
                 lbl.Content = careers.ElementAt(i).name;
-
 
                 // Add into stack
                 stack.Children.Add(image);
@@ -174,7 +185,7 @@ namespace BasicManipulation
                 // create Image
                 //
                 Image image = new Image();
-                image.Source = new BitmapImage(new Uri("C:\\Users\\ebag753\\Documents\\Visual Studio 2013\\Projects\\BasicManipulation\\BasicManipulation\\bin\\Debug\\prog_icon.png", UriKind.RelativeOrAbsolute));
+                image.Source = new BitmapImage(new Uri(BasicManipulation.Properties.Resources.programmeIcon));
 
                 // Label
                 //
@@ -199,14 +210,14 @@ namespace BasicManipulation
             {
                 careerLabel.Visibility = Visibility.Visible;
                 careerTreeView.Visibility = Visibility.Visible;
-                programmeToStudy.Visibility = Visibility.Visible;
+                programmeToStudyLabel.Visibility = Visibility.Visible;
                 programmeToStudyCanvass.Visibility = Visibility.Visible;
             }
             else
             {
                 careerLabel.Visibility = Visibility.Collapsed;
                 careerTreeView.Visibility = Visibility.Collapsed;
-                programmeToStudy.Visibility = Visibility.Collapsed;
+                programmeToStudyLabel.Visibility = Visibility.Collapsed;
                 programmeToStudyCanvass.Visibility = Visibility.Collapsed;
             }
         }
@@ -216,7 +227,7 @@ namespace BasicManipulation
             careerLabel.Text = CommonInternals.ECE_HEADER4;
             programmeToStudyTextBlock.Visibility = Visibility.Collapsed;
             eceWelcomeTextBlock.Visibility = Visibility.Collapsed;
-            programmeToStudy.Text = CommonInternals.ECE_HEADER5;
+            programmeToStudyLabel.Text = CommonInternals.ECE_HEADER5;
             cseLabel.Visibility = Visibility.Collapsed;
             eeeLabel.Visibility = Visibility.Collapsed;
             seLabel.Visibility = Visibility.Collapsed;
@@ -224,10 +235,12 @@ namespace BasicManipulation
             learnMoreFromCareer.Visibility = Visibility.Collapsed;
             learnMoreFromProgramme.Visibility = Visibility.Collapsed;
             programmeTreeView.Visibility = Visibility.Collapsed;
+            finalCoursesGrid.Visibility = Visibility.Collapsed;
+            Utilities.hideImages(careerImages);
 
             careerTreeView.Visibility = Visibility.Visible;
             careerLabel.Visibility = Visibility.Visible;
-            programmeToStudy.Visibility = Visibility.Visible;
+            programmeToStudyLabel.Visibility = Visibility.Visible;
             
             generateCareersTreeView();
         }
@@ -279,14 +292,31 @@ namespace BasicManipulation
                     {
                         selectedCareer = null;
                         learnMoreFromCareer.Visibility = Visibility.Visible;
-                        programmeToStudyTextBlock.Visibility = Visibility.Visible;
-                        programmeToStudyTextBlock.Text = career.description + "\n\n\nFinal courses to take:\n";
+                        //programmeToStudyTextBlock.Visibility = Visibility.Visible;
 
-                        List<String> finalCoursesToTake = DatabaseConnection.readCareerFinalCourses(career);
-                        for (int i = 0; i < finalCoursesToTake.Count; i++)
+                        Random rnd = new Random();
+                        int imageNum = rnd.Next(1, 6);
+                        Utilities.hideImages(careerImages, imageNum);
+
+                        // TODO: layout the Career description in the programmeToStudyTextBlock
+                        //
+                        //programmeToStudyTextBlock.Text = career.description;
+
+                        // Set the final courses for this career
+                        //
+                        finalCoursesGrid.Items.Clear();
+                        List<Course> finalCoursesToTake = DatabaseConnection.readCareerFinalCourses(career);
+                        foreach(Course course in finalCoursesToTake)
                         {
-                            programmeToStudyTextBlock.Text += finalCoursesToTake.ElementAt(i) + "\n";
+                            finalCoursesGrid.Items.Add(new CareerInfoDataItem() { finalCourse = course.id +  " - " + course.name });
                         }
+                        // Workaround to fill the table
+                        //
+                        for (int i = 0; i < 5; i++)
+                        {
+                            finalCoursesGrid.Items.Add(new CareerInfoDataItem() { finalCourse = "" });
+                        }
+                        finalCoursesGrid.Visibility = Visibility.Visible;
 
                         if (selectedCareer == null)
                         {
@@ -321,11 +351,13 @@ namespace BasicManipulation
             careerTreeView.Visibility = Visibility.Collapsed;
             learnMoreFromCareer.Visibility = Visibility.Collapsed;
             learnMoreFromProgramme.Visibility = Visibility.Collapsed;
-            programmeToStudy.Text = "";
+            finalCoursesGrid.Visibility = Visibility.Collapsed;
+            programmeToStudyLabel.Text = "";
+            Utilities.hideImages(careerImages);
 
             programmeTreeView.Visibility = Visibility.Visible;
             careerLabel.Visibility = Visibility.Visible;
-            programmeToStudy.Visibility = Visibility.Visible;
+            programmeToStudyLabel.Visibility = Visibility.Visible;
             generateProgrammesTreeView();
         }
 
@@ -350,11 +382,13 @@ namespace BasicManipulation
             programmeToStudyTextBlock.Visibility = Visibility.Collapsed;
             eceWelcomeTextBlock.Visibility = Visibility.Collapsed;
             careerLabel.Visibility = Visibility.Collapsed;
-            programmeToStudy.Visibility = Visibility.Collapsed;
+            programmeToStudyLabel.Visibility = Visibility.Collapsed;
             careerTreeView.Visibility = Visibility.Collapsed;
             programmeTreeView.Visibility = Visibility.Collapsed;
             learnMoreFromCareer.Visibility = Visibility.Collapsed;
             learnMoreFromProgramme.Visibility = Visibility.Collapsed;
+            finalCoursesGrid.Visibility = Visibility.Collapsed;
+            Utilities.hideImages(careerImages);
 
             cseLabel.Visibility = Visibility.Visible;
             eeeLabel.Visibility = Visibility.Visible;
@@ -425,7 +459,7 @@ namespace BasicManipulation
                     // create Image
                     //
                     Image image = new Image();
-                    image.Source = new BitmapImage(new Uri("C:\\Users\\ebag753\\Documents\\Visual Studio 2013\\Projects\\BasicManipulation\\BasicManipulation\\bin\\Debug\\prog_icon.png", UriKind.RelativeOrAbsolute));
+                    image.Source = new BitmapImage(new Uri(BasicManipulation.Properties.Resources.programmeIcon));
 
                     // Label
                     //

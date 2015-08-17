@@ -9,7 +9,8 @@
     <Window.Resources>
         <ResourceDictionary>
             <Style TargetType="ScrollBar">
-                <Setter Property="Width" Value="40"/>
+                <Setter Property="MinWidth" Value="40"/>
+                <Setter Property="MinHeight" Value="40"/>
             </Style>
         </ResourceDictionary>
     </Window.Resources>
@@ -24,9 +25,7 @@
                     <GradientStop Color="#FF813BB2" Offset="0.867"/>
                 </LinearGradientBrush>
             </Canvas.Background>
-            <!-- <Image Height="152" VerticalAlignment="Bottom" Source="FacultyEngineeringLogo.png" Width="396" Opacity="0.995"/> -->
-
-            <TextBlock Canvas.Left="401" TextWrapping="Wrap" Canvas.Top="10" Height="132" Width="1503" FontWeight="Medium" FontFamily="Century Gothic" FontSize="55" Text="Department of Electrical And Computer Engineering &quot;Using technology for humanity&quot;" Foreground="White" TextAlignment="Center">
+            <TextBlock Name="departmentHeaderLabel" Canvas.Left="401" TextWrapping="Wrap" Canvas.Top="10" Height="132" Width="1503" FontWeight="Medium" FontFamily="Century Gothic" FontSize="55" Foreground="White" TextAlignment="Center">
             </TextBlock>
             <Image Height="152" Canvas.Left="10" Source="FacultyEngineeringLogo.png" Stretch="Fill" Canvas.Top="10" Width="419"/>
         </Canvas>
@@ -148,7 +147,7 @@
                     </TextBlock.Effect>
                 </TextBlock>
 
-                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Height="859" Width="1317" Margin="5,0,0,0">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Height="859" Width="1317" Margin="5,0,0,0">
                     <Canvas x:Name="coursePathCanvas" Height="959" Width="1317" Margin="5,0,0,0">
                         <Line x:Name="dashLine1" Canvas.Left="329" Canvas.Top="0" Stroke="Black"
                           X1="0" X2="0" Y1="0" Y2="959"

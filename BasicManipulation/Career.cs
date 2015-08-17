@@ -23,4 +23,9 @@ namespace BasicManipulation
         public String name { get; set; }
         public String description { get; set; }
     }
+
+    public class CareerInfoDataItem
+    {
+        public String finalCourse { get; set; }
+    }
 }

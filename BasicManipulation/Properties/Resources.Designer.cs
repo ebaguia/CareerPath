@@ -61,6 +61,24 @@ namespace BasicManipulation.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to C:\Users\ebag753\Documents\UoA\Tasks\C_C_Demo\Downloads\career_images\apps_dev.png.
+        /// </summary>
+        public static string applicationDev {
+            get {
+                return ResourceManager.GetString("applicationDev", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to C:\Users\ebag753\Documents\UoA\Tasks\C_C_Demo\Downloads\career_images\career_default.png.
+        /// </summary>
+        public static string careerDefault {
+            get {
+                return ResourceManager.GetString("careerDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to C:\Users\ebag753\Documents\Visual Studio 2013\Projects\BasicManipulation\BasicManipulation\icons\careers_icon.png.
         /// </summary>
         public static string careersIcon {
@@ -88,6 +106,15 @@ namespace BasicManipulation.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to C:\Users\ebag753\Documents\UoA\Tasks\C_C_Demo\Downloads\career_images\power_elec.png.
+        /// </summary>
+        public static string highPowerElectronics {
+            get {
+                return ResourceManager.GetString("highPowerElectronics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to C:\Users\ebag753\Documents\Visual Studio 2013\Projects\BasicManipulation\BasicManipulation\icons\job_icon.png.
         /// </summary>
         public static string jobIcon {
@@ -106,11 +133,38 @@ namespace BasicManipulation.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to C:\Users\ebag753\Documents\UoA\Tasks\C_C_Demo\Downloads\career_images\renew_energy.png.
+        /// </summary>
+        public static string renewableEnergy {
+            get {
+                return ResourceManager.GetString("renewableEnergy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to C:\Users\ebag753\Documents\UoA\Tasks\C_C_Demo\Downloads\career_images\career_robotics.png.
+        /// </summary>
+        public static string robotics {
+            get {
+                return ResourceManager.GetString("robotics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to C:\Users\ebag753\Documents\Visual Studio 2013\Projects\BasicManipulation\BasicManipulation\icons\UoA_logo1.png.
         /// </summary>
         public static string universityLog {
             get {
                 return ResourceManager.GetString("universityLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to C:\Users\ebag753\Documents\UoA\Tasks\C_C_Demo\Downloads\career_images\wireless_comm.png.
+        /// </summary>
+        public static string wirelessCommunication {
+            get {
+                return ResourceManager.GetString("wirelessCommunication", resourceCulture);
             }
         }
     }

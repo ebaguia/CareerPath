@@ -16,35 +16,56 @@ namespace BasicManipulation
 
         static DatabaseConnection()
         {
-            dbConnectioName = "Data Source=" + CommonInternals.DB_NAME + ";Version=3;";
-            dbConnection = new SQLiteConnection(dbConnectioName);
+            try
+            {
+                dbConnectioName = "Data Source=" + CommonInternals.DB_NAME + ";Version=3;";
+                dbConnection = new SQLiteConnection(dbConnectioName);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("DatabaseConnection::DatabaseConnection() " + ex.Message);
+            }
         }
 
         public static void executeQuery(string queryStatement)
         {
-            dbConnection.Open();
-            sqlCommand = dbConnection.CreateCommand();
-            sqlCommand.CommandText = queryStatement;
-            sqlCommand.ExecuteNonQuery();
-            dbConnection.Close();
+            try
+            {
+                dbConnection.Open();
+                sqlCommand = dbConnection.CreateCommand();
+                sqlCommand.CommandText = queryStatement;
+                sqlCommand.ExecuteNonQuery();
+                dbConnection.Close();
+            }
+            catch(Exception ex)
+            {
+                Logger.Error("DatabaseConnection::executeQuery() " + ex.Message);
+            }
         }
 
         public static void readCareers(List<Career> careers)
         {
             String readCareerTable = "SELECT * FROM Career";
 
-            careers.Clear();
-            dbConnection.Open();
-            sqlCommand = new SQLiteCommand(readCareerTable, dbConnection);
-            dataReader = sqlCommand.ExecuteReader();
-
-            while(dataReader.Read())
+            try
             {
-                Career career = new Career(dataReader["ID"].ToString(), dataReader["NAME"].ToString(), dataReader["DESC"].ToString());
-                careers.Add(career);
-                Logger.Info("ID: "+ career.id + " NAME: " + career.name + " DESC: " + career.description);
+                careers.Clear();
+                dbConnection.Open();
+                sqlCommand = new SQLiteCommand(readCareerTable, dbConnection);
+                dataReader = sqlCommand.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    Career career = new Career(dataReader["ID"].ToString(), dataReader["NAME"].ToString(), dataReader["DESC"].ToString());
+                    careers.Add(career);
+                    Logger.Info("ID: " + career.id + " NAME: " + career.name + " DESC: " + career.description);
+                }
+                dbConnection.Close();
             }
-            dbConnection.Close();
+            catch(Exception ex)
+            {
+                Logger.Error("DatabaseConnection::readCareers() " + ex.Message);
+            }
         }
 
         public static List<String> readCareerJobs(Career career)
@@ -74,9 +95,9 @@ namespace BasicManipulation
             return jobs;
         }
 
-        public static List<String> readCareerFinalCourses(Career career)
+        public static List<Course> readCareerFinalCourses(Career career)
         {
-            List<String> courses = new List<string>();
+            List<Course> courses = new List<Course>();
             String readJobsTable = "SELECT COURSEID FROM FinalCourse WHERE CAREERID ='" + career.id + "'";
 
             try
@@ -87,9 +108,37 @@ namespace BasicManipulation
 
                 while (dataReader.Read())
                 {
-                    String courseName = dataReader["COURSEID"].ToString();
-                    courses.Add(courseName);
-                    Logger.Debug("DatabaseConnection::readCareerFinalCourses() career = " + career.id + " final course = " + courseName);
+                    String finalCourseId = dataReader["COURSEID"].ToString();
+                    String readFinalCourse = "SELECT * FROM Course WHERE ID = '" + finalCourseId + "'";
+
+                    SQLiteCommand sqlCommandTemp = new SQLiteCommand(readFinalCourse, dbConnection);
+                    SQLiteDataReader dataReaderTemp = sqlCommandTemp.ExecuteReader();
+                    Course finalCourse = null;
+                    while (dataReaderTemp.Read())
+                    {
+                        finalCourse = new Course(dataReaderTemp["ID"].ToString(),
+                                (int)dataReaderTemp["YR"],
+                                (int)dataReaderTemp["SEM"],
+                                dataReaderTemp["NAME"].ToString(),
+                                dataReaderTemp["DESC"].ToString(),
+                                (int)dataReaderTemp["POINTS"],
+                                dataReaderTemp["ACADEMICORG"].ToString(),
+                                dataReaderTemp["ACADEMICGROUP"].ToString(),
+                                dataReaderTemp["COURSECOMP"].ToString(),
+                                dataReaderTemp["GRADINGBASIS"].ToString(),
+                                dataReaderTemp["TYPOFFERED"].ToString(),
+                                dataReaderTemp["RESTR"].ToString(),
+                                dataReaderTemp["PREREQ"].ToString(),
+                                dataReaderTemp["COREQ"].ToString(),
+                                dataReaderTemp["REMARKS"].ToString(),
+                                dataReaderTemp["CAREERID"].ToString());
+                    }
+                    if (finalCourse != null)
+                    {
+                        Logger.Info("[DatabaseConnection::readCareerFinalCourses()] PreRequisite Course Information:");
+                        Logger.Info("[DatabaseConnection::readCareerFinalCourses()]" + "\nID: " + finalCourse.id + "\nNAME: " + finalCourse.name + "\nDESC: " + finalCourse.description);
+                        courses.Add(finalCourse);
+                    }
                 }
                 dbConnection.Close();
             }
@@ -105,18 +154,25 @@ namespace BasicManipulation
         {
             String readProgrammeStatement = "SELECT * FROM Programme";
 
-            programmes.Clear();
-            dbConnection.Open();
-            sqlCommand = new SQLiteCommand(readProgrammeStatement, dbConnection);
-            dataReader = sqlCommand.ExecuteReader();
-
-            while (dataReader.Read())
+            try
             {
-                Programme programme = new Programme(dataReader["ID"].ToString(), dataReader["NAME"].ToString(), dataReader["DESC"].ToString(), dataReader["COURSEID"].ToString());
-                programmes.Add(programme);
-                Logger.Info("ID: " + programme.id + " NAME: " + programme.name + " DESC: " + programme.description + " COURSEID: " + programme.courseId);
+                programmes.Clear();
+                dbConnection.Open();
+                sqlCommand = new SQLiteCommand(readProgrammeStatement, dbConnection);
+                dataReader = sqlCommand.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    Programme programme = new Programme(dataReader["ID"].ToString(), dataReader["NAME"].ToString(), dataReader["DESC"].ToString(), dataReader["COURSEID"].ToString());
+                    programmes.Add(programme);
+                    Logger.Info("ID: " + programme.id + " NAME: " + programme.name + " DESC: " + programme.description + " COURSEID: " + programme.courseId);
+                }
+                dbConnection.Close();
             }
-            dbConnection.Close();
+            catch (Exception e)
+            {
+                Logger.Error("DatabaseConnection::readProgrammes() " + e.Message);
+            }
         }
 
         public static String readProgrammeName(String programmeId)
@@ -124,11 +180,18 @@ namespace BasicManipulation
             String progName = null;
             String readProgrammeStatement = "SELECT NAME FROM Programme WHERE ID = '" + programmeId + "'";
 
-            dbConnection.Open();
-            sqlCommand = new SQLiteCommand(readProgrammeStatement, dbConnection);
-            dataReader = sqlCommand.ExecuteReader();
-            progName = dataReader.Read() ? dataReader.GetString(0) : "";
-            dbConnection.Close();
+            try
+            {
+                dbConnection.Open();
+                sqlCommand = new SQLiteCommand(readProgrammeStatement, dbConnection);
+                dataReader = sqlCommand.ExecuteReader();
+                progName = dataReader.Read() ? dataReader.GetString(0) : "";
+                dbConnection.Close();
+            }
+            catch (Exception e)
+            {
+                Logger.Error("DatabaseConnection::readProgrammeName() " + e.Message);
+            }
 
             return progName;
         }
@@ -138,11 +201,18 @@ namespace BasicManipulation
             String progName = null;
             String readProgrammeStatement = "SELECT DESC FROM Programme WHERE ID = '" + programmeId + "'";
 
-            dbConnection.Open();
-            sqlCommand = new SQLiteCommand(readProgrammeStatement, dbConnection);
-            dataReader = sqlCommand.ExecuteReader();
-            progName = dataReader.Read() ? dataReader.GetString(0) : "";
-            dbConnection.Close();
+            try
+            {
+                dbConnection.Open();
+                sqlCommand = new SQLiteCommand(readProgrammeStatement, dbConnection);
+                dataReader = sqlCommand.ExecuteReader();
+                progName = dataReader.Read() ? dataReader.GetString(0) : "";
+                dbConnection.Close();
+            }
+            catch (Exception e)
+            {
+                Logger.Error("DatabaseConnection::readProgrammeDescription() " + e.Message);
+            }
 
             return progName;
         }
@@ -152,32 +222,40 @@ namespace BasicManipulation
             String readCourseTable = "SELECT * FROM Course";
 
             courses.Clear();
-            dbConnection.Open();
-            sqlCommand = new SQLiteCommand(readCourseTable, dbConnection);
-            dataReader = sqlCommand.ExecuteReader();
 
-            while (dataReader.Read())
+            try
             {
-                Course course = new Course(dataReader["ID"].ToString(),
-                    (int)dataReader["YR"],
-                    (int)dataReader["SEM"],
-                    dataReader["NAME"].ToString(),
-                    dataReader["DESC"].ToString(),
-                    (int)dataReader["POINTS"],
-                    dataReader["ACADEMICORG"].ToString(),
-                    dataReader["ACADEMICGROUP"].ToString(),
-                    dataReader["COURSECOMP"].ToString(),
-                    dataReader["GRADINGBASIS"].ToString(),
-                    dataReader["TYPOFFERED"].ToString(),
-                    dataReader["RESTR"].ToString(),
-                    dataReader["PREREQ"].ToString(),
-                    dataReader["COREQ"].ToString(),
-                    dataReader["REMARKS"].ToString(),
-                    dataReader["CAREERID"].ToString());
-                courses.Add(course);
-                Logger.Info("ID: " + course.id + " NAME: " + course.name + " DESC: " + course.description);
+                dbConnection.Open();
+                sqlCommand = new SQLiteCommand(readCourseTable, dbConnection);
+                dataReader = sqlCommand.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    Course course = new Course(dataReader["ID"].ToString(),
+                        (int)dataReader["YR"],
+                        (int)dataReader["SEM"],
+                        dataReader["NAME"].ToString(),
+                        dataReader["DESC"].ToString(),
+                        (int)dataReader["POINTS"],
+                        dataReader["ACADEMICORG"].ToString(),
+                        dataReader["ACADEMICGROUP"].ToString(),
+                        dataReader["COURSECOMP"].ToString(),
+                        dataReader["GRADINGBASIS"].ToString(),
+                        dataReader["TYPOFFERED"].ToString(),
+                        dataReader["RESTR"].ToString(),
+                        dataReader["PREREQ"].ToString(),
+                        dataReader["COREQ"].ToString(),
+                        dataReader["REMARKS"].ToString(),
+                        dataReader["CAREERID"].ToString());
+                    courses.Add(course);
+                    Logger.Info("ID: " + course.id + " NAME: " + course.name + " DESC: " + course.description);
+                }
+                dbConnection.Close();
             }
-            dbConnection.Close();
+            catch (Exception e)
+            {
+                Logger.Error("DatabaseConnection::readCourses() " + e.Message);
+            }
         }
 
         public static Course getCourse(String courseId)
@@ -185,42 +263,49 @@ namespace BasicManipulation
             Course course = null;
             String readCourseTable = "SELECT * FROM Course WHERE ID  = '" + courseId + "'";
 
-            dbConnection.Open();
-            sqlCommand = new SQLiteCommand(readCourseTable, dbConnection);
-            dataReader = sqlCommand.ExecuteReader();
-
-            while (dataReader.Read())
+            try
             {
-                course = new Course(dataReader["ID"].ToString(),
-                    (int)dataReader["YR"],
-                    (int)dataReader["SEM"],
-                    dataReader["NAME"].ToString(),
-                    dataReader["DESC"].ToString(),
-                    (int)dataReader["POINTS"],
-                    dataReader["ACADEMICORG"].ToString(),
-                    dataReader["ACADEMICGROUP"].ToString(),
-                    dataReader["COURSECOMP"].ToString(),
-                    dataReader["GRADINGBASIS"].ToString(),
-                    dataReader["TYPOFFERED"].ToString(),
-                    dataReader["RESTR"].ToString(),
-                    dataReader["PREREQ"].ToString(),
-                    dataReader["COREQ"].ToString(),
-                    dataReader["REMARKS"].ToString(),
-                    dataReader["CAREERID"].ToString());
-                Logger.Info("[DatabaseConnection::getCourse()]" + "\nID: " + course.id + "\nNAME: " + course.name + "\nDESC: " + course.description);
-            }
+                dbConnection.Open();
+                sqlCommand = new SQLiteCommand(readCourseTable, dbConnection);
+                dataReader = sqlCommand.ExecuteReader();
 
-            dbConnection.Close();
+                while (dataReader.Read())
+                {
+                    course = new Course(dataReader["ID"].ToString(),
+                        (int)dataReader["YR"],
+                        (int)dataReader["SEM"],
+                        dataReader["NAME"].ToString(),
+                        dataReader["DESC"].ToString(),
+                        (int)dataReader["POINTS"],
+                        dataReader["ACADEMICORG"].ToString(),
+                        dataReader["ACADEMICGROUP"].ToString(),
+                        dataReader["COURSECOMP"].ToString(),
+                        dataReader["GRADINGBASIS"].ToString(),
+                        dataReader["TYPOFFERED"].ToString(),
+                        dataReader["RESTR"].ToString(),
+                        dataReader["PREREQ"].ToString(),
+                        dataReader["COREQ"].ToString(),
+                        dataReader["REMARKS"].ToString(),
+                        dataReader["CAREERID"].ToString());
+                    Logger.Info("[DatabaseConnection::getCourse()]" + "\nID: " + course.id + "\nNAME: " + course.name + "\nDESC: " + course.description);
+                }
+
+                dbConnection.Close();
+            }
+            catch (Exception e)
+            {
+                Logger.Error("DatabaseConnection::getCourse() " + e.Message);
+            }
 
             return course;
         }
 
-        public static List<Course> generateAllRelatedPreRequisites(String courseId)
+        public static List<Course> generateAllRelatedPreRequisites(Course course)
         {
             List<Course> preRequisiteCourses = new List<Course>();
             String queryStatement = @"WITH RECURSIVE
   pre_req_courses(n) AS (
-    VALUES('" + courseId + @"')
+    VALUES('" + course.id + @"')
     UNION
     SELECT COURSEID FROM PreRequisite, pre_req_courses
      WHERE PreRequisite.FOLLOWID=pre_req_courses.n
@@ -228,45 +313,52 @@ namespace BasicManipulation
 SELECT COURSEID FROM PreRequisite
  WHERE PreRequisite.FOLLOWID IN pre_req_courses";
 
-            dbConnection.Open();
-            sqlCommand = new SQLiteCommand(queryStatement, dbConnection);
-            dataReader = sqlCommand.ExecuteReader();
-
-            while (dataReader.Read())
+            try
             {
-                String preReqCourseId = dataReader["COURSEID"].ToString();
-                String readPreReqCourse = "SELECT * FROM Course WHERE ID = '" + preReqCourseId + "'";
+                dbConnection.Open();
+                sqlCommand = new SQLiteCommand(queryStatement, dbConnection);
+                dataReader = sqlCommand.ExecuteReader();
 
-                SQLiteCommand sqlCommandTemp = new SQLiteCommand(readPreReqCourse, dbConnection);
-                SQLiteDataReader dataReaderTemp = sqlCommandTemp.ExecuteReader();
-                Course preReq = null;
-                while (dataReaderTemp.Read())
+                while (dataReader.Read())
                 {
-                    preReq = new Course(dataReaderTemp["ID"].ToString(),
-                            (int)dataReaderTemp["YR"],
-                            (int)dataReaderTemp["SEM"],
-                            dataReaderTemp["NAME"].ToString(),
-                            dataReaderTemp["DESC"].ToString(),
-                            (int)dataReaderTemp["POINTS"],
-                            dataReaderTemp["ACADEMICORG"].ToString(),
-                            dataReaderTemp["ACADEMICGROUP"].ToString(),
-                            dataReaderTemp["COURSECOMP"].ToString(),
-                            dataReaderTemp["GRADINGBASIS"].ToString(),
-                            dataReaderTemp["TYPOFFERED"].ToString(),
-                            dataReaderTemp["RESTR"].ToString(),
-                            dataReaderTemp["PREREQ"].ToString(),
-                            dataReaderTemp["COREQ"].ToString(),
-                            dataReaderTemp["REMARKS"].ToString(),
-                            dataReaderTemp["CAREERID"].ToString());
+                    String preReqCourseId = dataReader["COURSEID"].ToString();
+                    String readPreReqCourse = "SELECT * FROM Course WHERE ID = '" + preReqCourseId + "'";
+
+                    SQLiteCommand sqlCommandTemp = new SQLiteCommand(readPreReqCourse, dbConnection);
+                    SQLiteDataReader dataReaderTemp = sqlCommandTemp.ExecuteReader();
+                    Course preReq = null;
+                    while (dataReaderTemp.Read())
+                    {
+                        preReq = new Course(dataReaderTemp["ID"].ToString(),
+                                (int)dataReaderTemp["YR"],
+                                (int)dataReaderTemp["SEM"],
+                                dataReaderTemp["NAME"].ToString(),
+                                dataReaderTemp["DESC"].ToString(),
+                                (int)dataReaderTemp["POINTS"],
+                                dataReaderTemp["ACADEMICORG"].ToString(),
+                                dataReaderTemp["ACADEMICGROUP"].ToString(),
+                                dataReaderTemp["COURSECOMP"].ToString(),
+                                dataReaderTemp["GRADINGBASIS"].ToString(),
+                                dataReaderTemp["TYPOFFERED"].ToString(),
+                                dataReaderTemp["RESTR"].ToString(),
+                                dataReaderTemp["PREREQ"].ToString(),
+                                dataReaderTemp["COREQ"].ToString(),
+                                dataReaderTemp["REMARKS"].ToString(),
+                                dataReaderTemp["CAREERID"].ToString());
+                    }
+                    if (preReq != null)
+                    {
+                        Logger.Info("[DatabaseConnection::getPrerequisiteCourse()] PreRequisite Course Information:");
+                        Logger.Info("[DatabaseConnection::getPrerequisiteCourse()]" + "\nID: " + preReq.id + "\nNAME: " + preReq.name + "\nDESC: " + preReq.description);
+                        preRequisiteCourses.Add(preReq);
+                    }
                 }
-                if (preReq != null)
-                {
-                    Logger.Info("[DatabaseConnection::getPrerequisiteCourse()] PreRequisite Course Information:");
-                    Logger.Info("[DatabaseConnection::getPrerequisiteCourse()]" + "\nID: " + preReq.id + "\nNAME: " + preReq.name + "\nDESC: " + preReq.description);
-                    preRequisiteCourses.Add(preReq);
-                }
+                dbConnection.Close();
             }
-            dbConnection.Close();
+            catch (Exception e)
+            {
+                Logger.Error("DatabaseConnection::generateAllRelatedPreRequisites() " + e.Message);
+            }
 
             return preRequisiteCourses;
         }
@@ -361,43 +453,50 @@ SELECT COURSEID FROM PreRequisite
             List<Course> courses = new List<Course>();
             String readCSECoursesStatement = "SELECT COURSEID FROM CourseProgrammePart WHERE PROGRAMMEID = '" + programme.id + "'";
 
-            dbConnection.Open();
-            sqlCommand = new SQLiteCommand(readCSECoursesStatement, dbConnection);
-            dataReader = sqlCommand.ExecuteReader();
-
-            while (dataReader.Read())
+            try
             {
-                String cseCourseId = dataReader["COURSEID"].ToString();
-                String readCSECourse = "SELECT * FROM Course WHERE ID = '" + cseCourseId + "'";
+                dbConnection.Open();
+                sqlCommand = new SQLiteCommand(readCSECoursesStatement, dbConnection);
+                dataReader = sqlCommand.ExecuteReader();
 
-                SQLiteCommand sqlCommandTemp = new SQLiteCommand(readCSECourse, dbConnection);
-                SQLiteDataReader dataReaderTemp = sqlCommandTemp.ExecuteReader();
-
-                while (dataReaderTemp.Read())
+                while (dataReader.Read())
                 {
-                    Course cseCourse = new Course(dataReaderTemp["ID"].ToString(),
-                            (int)dataReaderTemp["YR"],
-                            (int)dataReaderTemp["SEM"],
-                            dataReaderTemp["NAME"].ToString(),
-                            dataReaderTemp["DESC"].ToString(),
-                            (int)dataReaderTemp["POINTS"],
-                            dataReaderTemp["ACADEMICORG"].ToString(),
-                            dataReaderTemp["ACADEMICGROUP"].ToString(),
-                            dataReaderTemp["COURSECOMP"].ToString(),
-                            dataReaderTemp["GRADINGBASIS"].ToString(),
-                            dataReaderTemp["TYPOFFERED"].ToString(),
-                            dataReaderTemp["RESTR"].ToString(),
-                            dataReaderTemp["PREREQ"].ToString(),
-                            dataReaderTemp["COREQ"].ToString(),
-                            dataReaderTemp["REMARKS"].ToString(),
-                            dataReaderTemp["CAREERID"].ToString());
+                    String cseCourseId = dataReader["COURSEID"].ToString();
+                    String readCSECourse = "SELECT * FROM Course WHERE ID = '" + cseCourseId + "'";
 
-                    Logger.Info("[DatabaseConnection::readCSECourses()] PreRequisite Course Information:");
-                    Logger.Info("[DatabaseConnection::readCSECourses()]" + "\nID: " + cseCourse.id + "\nNAME: " + cseCourse.name + "\nDESC: " + cseCourse.description);
-                    courses.Add(cseCourse);
+                    SQLiteCommand sqlCommandTemp = new SQLiteCommand(readCSECourse, dbConnection);
+                    SQLiteDataReader dataReaderTemp = sqlCommandTemp.ExecuteReader();
+
+                    while (dataReaderTemp.Read())
+                    {
+                        Course cseCourse = new Course(dataReaderTemp["ID"].ToString(),
+                                (int)dataReaderTemp["YR"],
+                                (int)dataReaderTemp["SEM"],
+                                dataReaderTemp["NAME"].ToString(),
+                                dataReaderTemp["DESC"].ToString(),
+                                (int)dataReaderTemp["POINTS"],
+                                dataReaderTemp["ACADEMICORG"].ToString(),
+                                dataReaderTemp["ACADEMICGROUP"].ToString(),
+                                dataReaderTemp["COURSECOMP"].ToString(),
+                                dataReaderTemp["GRADINGBASIS"].ToString(),
+                                dataReaderTemp["TYPOFFERED"].ToString(),
+                                dataReaderTemp["RESTR"].ToString(),
+                                dataReaderTemp["PREREQ"].ToString(),
+                                dataReaderTemp["COREQ"].ToString(),
+                                dataReaderTemp["REMARKS"].ToString(),
+                                dataReaderTemp["CAREERID"].ToString());
+
+                        Logger.Info("[DatabaseConnection::readCoursesFromProgramme()] PreRequisite Course Information:");
+                        Logger.Info("[DatabaseConnection::readCoursesFromProgramme()]" + "\nID: " + cseCourse.id + "\nNAME: " + cseCourse.name + "\nDESC: " + cseCourse.description);
+                        courses.Add(cseCourse);
+                    }
                 }
+                dbConnection.Close();
             }
-            dbConnection.Close();
+            catch (Exception e)
+            {
+                Logger.Error("DatabaseConnection::readCoursesFromProgramme() " + e.Message);
+            }
 
             return courses;
         }
@@ -407,43 +506,50 @@ SELECT COURSEID FROM PreRequisite
             List<Course> courses = new List<Course>();
             String readCoursesStatement = "SELECT COURSEID FROM CourseProgrammePart WHERE PROGRAMMEID = '" + programme.id + "' AND PART = '" + part + "'";
 
-            dbConnection.Open();
-            sqlCommand = new SQLiteCommand(readCoursesStatement, dbConnection);
-            dataReader = sqlCommand.ExecuteReader();
-
-            while (dataReader.Read())
+            try
             {
-                String cseCourseId = dataReader["COURSEID"].ToString();
-                String readCSECourse = "SELECT * FROM Course WHERE ID = '" + cseCourseId + "'";
+                dbConnection.Open();
+                sqlCommand = new SQLiteCommand(readCoursesStatement, dbConnection);
+                dataReader = sqlCommand.ExecuteReader();
 
-                SQLiteCommand sqlCommandTemp = new SQLiteCommand(readCSECourse, dbConnection);
-                SQLiteDataReader dataReaderTemp = sqlCommandTemp.ExecuteReader();
-
-                while (dataReaderTemp.Read())
+                while (dataReader.Read())
                 {
-                    Course cseCourse = new Course(dataReaderTemp["ID"].ToString(),
-                            (int)dataReaderTemp["YR"],
-                            (int)dataReaderTemp["SEM"],
-                            dataReaderTemp["NAME"].ToString(),
-                            dataReaderTemp["DESC"].ToString(),
-                            (int)dataReaderTemp["POINTS"],
-                            dataReaderTemp["ACADEMICORG"].ToString(),
-                            dataReaderTemp["ACADEMICGROUP"].ToString(),
-                            dataReaderTemp["COURSECOMP"].ToString(),
-                            dataReaderTemp["GRADINGBASIS"].ToString(),
-                            dataReaderTemp["TYPOFFERED"].ToString(),
-                            dataReaderTemp["RESTR"].ToString(),
-                            dataReaderTemp["PREREQ"].ToString(),
-                            dataReaderTemp["COREQ"].ToString(),
-                            dataReaderTemp["REMARKS"].ToString(),
-                            dataReaderTemp["CAREERID"].ToString());
+                    String cseCourseId = dataReader["COURSEID"].ToString();
+                    String readCSECourse = "SELECT * FROM Course WHERE ID = '" + cseCourseId + "'";
 
-                    Logger.Info("[DatabaseConnection::readCSECourses()] PreRequisite Course Information:");
-                    Logger.Info("[DatabaseConnection::readCSECourses()]" + "\nID: " + cseCourse.id + "\nNAME: " + cseCourse.name + "\nDESC: " + cseCourse.description);
-                    courses.Add(cseCourse);
+                    SQLiteCommand sqlCommandTemp = new SQLiteCommand(readCSECourse, dbConnection);
+                    SQLiteDataReader dataReaderTemp = sqlCommandTemp.ExecuteReader();
+
+                    while (dataReaderTemp.Read())
+                    {
+                        Course cseCourse = new Course(dataReaderTemp["ID"].ToString(),
+                                (int)dataReaderTemp["YR"],
+                                (int)dataReaderTemp["SEM"],
+                                dataReaderTemp["NAME"].ToString(),
+                                dataReaderTemp["DESC"].ToString(),
+                                (int)dataReaderTemp["POINTS"],
+                                dataReaderTemp["ACADEMICORG"].ToString(),
+                                dataReaderTemp["ACADEMICGROUP"].ToString(),
+                                dataReaderTemp["COURSECOMP"].ToString(),
+                                dataReaderTemp["GRADINGBASIS"].ToString(),
+                                dataReaderTemp["TYPOFFERED"].ToString(),
+                                dataReaderTemp["RESTR"].ToString(),
+                                dataReaderTemp["PREREQ"].ToString(),
+                                dataReaderTemp["COREQ"].ToString(),
+                                dataReaderTemp["REMARKS"].ToString(),
+                                dataReaderTemp["CAREERID"].ToString());
+
+                        Logger.Info("[DatabaseConnection::readCoursesUsingProgrammePart()] PreRequisite Course Information:");
+                        Logger.Info("[DatabaseConnection::readCoursesUsingProgrammePart()]" + "\nID: " + cseCourse.id + "\nNAME: " + cseCourse.name + "\nDESC: " + cseCourse.description);
+                        courses.Add(cseCourse);
+                    }
                 }
+                dbConnection.Close();
             }
-            dbConnection.Close();
+            catch (Exception e)
+            {
+                Logger.Error("DatabaseConnection::readCoursesUsingProgrammePart() " + e.Message);
+            }
 
             return courses;
         }
@@ -453,16 +559,23 @@ SELECT COURSEID FROM PreRequisite
             List<CourseProgrammePart> courseProgrammePartList = new List<CourseProgrammePart>();
             String readCSECoursesStatement = "SELECT * FROM CourseProgrammePart WHERE PROGRAMMEID = '" + programme.id + "'";
 
-            dbConnection.Open();
-            sqlCommand = new SQLiteCommand(readCSECoursesStatement, dbConnection);
-            dataReader = sqlCommand.ExecuteReader();
-
-            while (dataReader.Read())
+            try
             {
-                CourseProgrammePart courseProgrammePart = new CourseProgrammePart(dataReader["COURSEID"].ToString(), dataReader["PART"].ToString(), dataReader["PROGRAMMEID"].ToString());
-                courseProgrammePartList.Add(courseProgrammePart);
+                dbConnection.Open();
+                sqlCommand = new SQLiteCommand(readCSECoursesStatement, dbConnection);
+                dataReader = sqlCommand.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    CourseProgrammePart courseProgrammePart = new CourseProgrammePart(dataReader["COURSEID"].ToString(), dataReader["PART"].ToString(), dataReader["PROGRAMMEID"].ToString());
+                    courseProgrammePartList.Add(courseProgrammePart);
+                }
+                dbConnection.Close();
             }
-            dbConnection.Close();
+            catch (Exception e)
+            {
+                Logger.Error("DatabaseConnection::readCourseProgrammePart() " + e.Message);
+            }
 
             return courseProgrammePartList;
         }
@@ -471,7 +584,6 @@ SELECT COURSEID FROM PreRequisite
         {
             List<Course> restrictionList = new List<Course>();
             String readPreReqs = "SELECT RESTRCOURSEID FROM Restrictions WHERE COURSEID = '" + courseId + "'";
-            Logger.Debug("ACHTUNG 0 readStatement: " + readPreReqs);
 
             try
             {
@@ -485,13 +597,10 @@ SELECT COURSEID FROM PreRequisite
                     String readCourse = "SELECT * FROM Course WHERE ID = '" + restrCourseId + "'";
 
                     SQLiteCommand sqlCommandTemp = new SQLiteCommand(readCourse, dbConnection);
-                    Logger.Debug("ACHTUNG 1");
                     SQLiteDataReader dataReaderTemp = sqlCommandTemp.ExecuteReader();
-                    Logger.Debug("ACHTUNG 2");
 
                     while (dataReaderTemp.Read())
                     {
-                        Logger.Debug("ACHTUNG 3");
                         Course restrCourse = new Course(dataReaderTemp["ID"].ToString(),
                                 (int)dataReaderTemp["YR"],
                                 (int)dataReaderTemp["SEM"],
@@ -508,12 +617,10 @@ SELECT COURSEID FROM PreRequisite
                                 dataReaderTemp["COREQ"].ToString(),
                                 dataReaderTemp["REMARKS"].ToString(),
                                 dataReaderTemp["CAREERID"].ToString());
-                        Logger.Debug("ACHTUNG 4");
 
                         Logger.Info("[DatabaseConnection::getRestrictionCourses()] Restricted Course Information:");
                         Logger.Info("[DatabaseConnection::getRestrictionCourses()]" + "\nID: " + restrCourse.id + "\nNAME: " + restrCourse.name + "\nDESC: " + restrCourse.description);
                         restrictionList.Add(restrCourse);
-                        Logger.Debug("ACHTUNG 5");
                     }
                 }
                 dbConnection.Close();
@@ -532,11 +639,18 @@ SELECT COURSEID FROM PreRequisite
 
             String queryStatement = "SELECT * FROM CompulsoryCourse WHERE COURSEID = '" + targetCourse.id + "'";
 
-            dbConnection.Open();
-            sqlCommand = new SQLiteCommand(queryStatement, dbConnection);
-            dataReader = sqlCommand.ExecuteReader();
-            isCompulsory = dataReader.Read() ? true : false;
-            dbConnection.Close();
+            try
+            {
+                dbConnection.Open();
+                sqlCommand = new SQLiteCommand(queryStatement, dbConnection);
+                dataReader = sqlCommand.ExecuteReader();
+                isCompulsory = dataReader.Read() ? true : false;
+                dbConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("DatabaseConnection::isCourseCompulsory() " + ex.Message);
+            }
 
             return isCompulsory;
         }
@@ -547,11 +661,18 @@ SELECT COURSEID FROM PreRequisite
 
             String queryStatement = "SELECT * FROM ElectiveCourse WHERE COURSEID = '" + targetCourse.id + "'";
 
-            dbConnection.Open();
-            sqlCommand = new SQLiteCommand(queryStatement, dbConnection);
-            dataReader = sqlCommand.ExecuteReader();
-            isElective = dataReader.Read() ? true : false;
-            dbConnection.Close();
+            try
+            {
+                dbConnection.Open();
+                sqlCommand = new SQLiteCommand(queryStatement, dbConnection);
+                dataReader = sqlCommand.ExecuteReader();
+                isElective = dataReader.Read() ? true : false;
+                dbConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("DatabaseConnection::isCourseElective() " + ex.Message);
+            }
 
             return isElective;
         }

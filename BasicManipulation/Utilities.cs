@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace BasicManipulation
@@ -70,6 +71,61 @@ namespace BasicManipulation
             Rect rectangleBounds = new Rect();
             rectangleBounds = _element.RenderTransform.TransformBounds(new Rect(0, 0, _element.Width, _element.Height));
             return rectangleBounds;
+        }
+
+        public static void fillCourseInfoDataGrid(DataGrid courseInfoDataGrid, Course course)
+        {
+            // Display purpose only
+            //
+            List<Course> preReqList = DatabaseConnection.getPrerequisiteCourses(course.id);
+            String preReqString = "";
+            foreach (Course preReqCourse in preReqList)
+            {
+                preReqString += preReqCourse.id + ",";
+            }
+            if (preReqString.Length > 1)
+            {
+                preReqString = preReqString.Remove(preReqString.Length - 1);
+            }
+
+            List<Course> restrList = DatabaseConnection.getRestrictionCourses(course.id);
+            String restrString = "";
+            foreach (Course restrCourse in restrList)
+            {
+                restrString += restrCourse.id + ",";
+            }
+            if (restrString.Length > 1)
+            {
+                restrString = restrString.Remove(restrString.Length - 1);
+            }
+
+            courseInfoDataGrid.Items.Clear();
+            courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Course", description = course.id });
+            courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Name", description = course.name });
+            courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Description", description = course.description });
+            courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Prerequisite(s)", description = preReqString });
+            courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Restrictions(s)", description = restrString });
+
+            // Workaround to fill the table view
+            //
+            //courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "", description = "" });
+            //courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "", description = "" });
+            //courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "", description = "" });
+        }
+
+        public static void hideImages(Image[] images, int except = -1)
+        {
+            for (int i = 0; i < images.Length; i++)
+            {
+                if (i == except)
+                {
+                    images[i].Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    images[i].Visibility = Visibility.Collapsed;
+                }
+            }
         }
     }
 }

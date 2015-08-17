@@ -49,7 +49,7 @@
             <Button.Effect>
                 <DropShadowEffect ShadowDepth="10"/>
             </Button.Effect>
-            <TextBlock TextAlignment="Center" Text="Learn more" FontWeight="Medium"/>
+            <TextBlock TextAlignment="Center" Text="Explore" FontWeight="Medium"/>
         </Button>
         <TextBlock x:Name="welcomeTextBlock" Height="280" Canvas.Left="-762" TextWrapping="Wrap" Canvas.Top="502" Width="1525" FontSize="72" FontFamily="Century Gothic" TextAlignment="Center" TextDecorations="{x:Null}" Foreground="Black" Text="Welcome to the University of Auckland Department of Electrical and Computer Engineering">
             <TextBlock.Effect>
