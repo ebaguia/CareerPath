@@ -75,6 +75,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CourseProgrammePart.cs" />
+    <Compile Include="GifImage.cs" />
     <Compile Include="Utilities.cs" />
     <Page Include="DepartmentWindow.xaml">
       <SubType>Designer</SubType>

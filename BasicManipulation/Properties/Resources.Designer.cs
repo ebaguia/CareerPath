@@ -97,11 +97,29 @@ namespace BasicManipulation.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to C:\Users\ebag753\Documents\UoA\Tasks\C_C_Demo\Downloads\career_images\eceCareerGifImage.gif.
+        /// </summary>
+        public static string eceCareerGifImage {
+            get {
+                return ResourceManager.GetString("eceCareerGifImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to C:\Users\ebag753\Documents\Visual Studio 2013\Projects\BasicManipulation\BasicManipulation\icons\FacultyEngineeringLogo.png.
         /// </summary>
         public static string eceFacultyLogo {
             get {
                 return ResourceManager.GetString("eceFacultyLogo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to C:\Users\ebag753\Documents\UoA\Tasks\C_C_Demo\Downloads\gif\eceGifImage.gif.
+        /// </summary>
+        public static string eceGifImage {
+            get {
+                return ResourceManager.GetString("eceGifImage", resourceCulture);
             }
         }
         
@@ -151,7 +169,7 @@ namespace BasicManipulation.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to C:\Users\ebag753\Documents\Visual Studio 2013\Projects\BasicManipulation\BasicManipulation\icons\UoA_logo1.png.
+        ///   Looks up a localized string similar to C:\Users\ebag753\Documents\Visual Studio 2013\Projects\BasicManipulation\BasicManipulation\icons\logo.png.
         /// </summary>
         public static string universityLog {
             get {

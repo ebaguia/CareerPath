@@ -21,7 +21,6 @@ namespace BasicManipulation
     public partial class DepartmentWindow : Window
     {
         private MainWindow mainWindow = null;
-        private Image[] careerImages = null;
         public Career selectedCareer { get; set; }
         public Course selectedCourse { get; set; }
         public Programme selectedProgramme { get; set; }
@@ -32,27 +31,26 @@ namespace BasicManipulation
         public bool isSetCourse { get; set; }
         public bool isSetProgramme { get; set; }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public DepartmentWindow(MainWindow mainWindow)
         {
             InitializeComponent();
             this.mainWindow = mainWindow;
 
-            // Let's hide the components on the right for now
+            // Main Page init
             //
-            careerLabel.Text = CommonInternals.ECE_HEADER1;
-            programmeToStudyLabel.Text = CommonInternals.ECE_HEADER2;
-            eceWelcomeTextBlock.Text = CommonInternals.ECE_LABEL1;
-            programmeToStudyTextBlock.Text = CommonInternals.ECE_LABEL2;
-            learnMoreFromCareer.Visibility = Visibility.Collapsed;
-            learnMoreFromProgramme.Visibility = Visibility.Collapsed;
-            careerTreeView.Visibility = Visibility.Collapsed;
-            programmeTreeView.Visibility = Visibility.Collapsed;
-            coursesGrid.Visibility = Visibility.Collapsed;
-            cseLabel.Visibility = Visibility.Collapsed;
-            eeeLabel.Visibility = Visibility.Collapsed;
-            seLabel.Visibility = Visibility.Collapsed;
-            finalCoursesGrid.Visibility = Visibility.Collapsed;
-            
+            mainPageLabelLeft.Text = CommonInternals.ECE_HEADER1;
+            mainPageLabelRight.Text = CommonInternals.ECE_HEADER2;
+            mainPageTBLeft.Text = CommonInternals.ECE_LABEL1;
+            mainPageTBRight.Text = CommonInternals.ECE_LABEL2;
+            mainPageGrid.Visibility = Visibility.Visible;
+
+            careerPageGrid.Visibility = Visibility.Collapsed;
+            programmePageGrid.Visibility = Visibility.Collapsed;
+            coursePageGrid.Visibility = Visibility.Collapsed;
+
             careers = new List<Career>();
             programmes = new List<Programme>();
             courses = new List<Course>();
@@ -65,26 +63,26 @@ namespace BasicManipulation
             isSetCourse = false;
             isSetProgramme = false;
 
+            // The lable dynamically changes in every Career
+            //
             departmentHeaderLabel.Text = CommonInternals.ECE_DEPARTMENT_NAME + "\n" + CommonInternals.ECE_CAREERS_HEADER_TXT;
-
-            careerImages = new Image[6];
-            careerImages[0] = highPowerElectronics;
-            careerImages[1] = applicationDev;
-            careerImages[2] = careerDefault;
-            careerImages[3] = renewableEnergy;
-            careerImages[4] = robotics;
-            careerImages[5] = wirelessCommunication;
         }
 
+        /// <summary>
+        /// Handles the clicking of the HOME button.
+        /// </summary>
         private void homeButton_Click(object sender, RoutedEventArgs e)
         {
-            Hide();
             if (mainWindow != null)
             {
                 mainWindow.Show();
+                Close();
             }
         }
 
+        /// <summary>
+        /// Lists all careers from the database to a TreeView.
+        /// </summary>
         private void generateCareersTreeView()
         {
             TreeViewItem[] careerItems = new TreeViewItem[careers.Count];
@@ -160,6 +158,9 @@ namespace BasicManipulation
             }
         }
 
+        /// <summary>
+        /// Lists all programmes from the database to a TreeView.
+        /// </summary>
         private void generateProgrammesTreeView()
         {
             TreeViewItem[] programmeItems = new TreeViewItem[programmes.Count];
@@ -204,47 +205,23 @@ namespace BasicManipulation
             }
         }
 
-        private void showCareerComponents(bool show)
-        {
-            if(show == true)
-            {
-                careerLabel.Visibility = Visibility.Visible;
-                careerTreeView.Visibility = Visibility.Visible;
-                programmeToStudyLabel.Visibility = Visibility.Visible;
-                programmeToStudyCanvass.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                careerLabel.Visibility = Visibility.Collapsed;
-                careerTreeView.Visibility = Visibility.Collapsed;
-                programmeToStudyLabel.Visibility = Visibility.Collapsed;
-                programmeToStudyCanvass.Visibility = Visibility.Collapsed;
-            }
-        }
-
+        /// <summary>
+        /// Handles the clicking of the Career button.
+        /// </summary>
         private void careerPathwayButton_Click(object sender, RoutedEventArgs e)
         {
-            careerLabel.Text = CommonInternals.ECE_HEADER4;
-            programmeToStudyTextBlock.Visibility = Visibility.Collapsed;
-            eceWelcomeTextBlock.Visibility = Visibility.Collapsed;
-            programmeToStudyLabel.Text = CommonInternals.ECE_HEADER5;
-            cseLabel.Visibility = Visibility.Collapsed;
-            eeeLabel.Visibility = Visibility.Collapsed;
-            seLabel.Visibility = Visibility.Collapsed;
-            coursesGrid.Visibility = Visibility.Collapsed;
-            learnMoreFromCareer.Visibility = Visibility.Collapsed;
-            learnMoreFromProgramme.Visibility = Visibility.Collapsed;
-            programmeTreeView.Visibility = Visibility.Collapsed;
-            finalCoursesGrid.Visibility = Visibility.Collapsed;
-            Utilities.hideImages(careerImages);
+            careerPageGrid.Visibility = Visibility.Visible;
 
-            careerTreeView.Visibility = Visibility.Visible;
-            careerLabel.Visibility = Visibility.Visible;
-            programmeToStudyLabel.Visibility = Visibility.Visible;
+            mainPageGrid.Visibility = Visibility.Collapsed;
+            programmePageGrid.Visibility = Visibility.Collapsed;
+            coursePageGrid.Visibility = Visibility.Collapsed;
             
             generateCareersTreeView();
         }
 
+        /// <summary>
+        /// Handles the programme selection.
+        /// </summary>
         private void programmeTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             TreeViewItem tvi = (TreeViewItem)e.NewValue;
@@ -259,12 +236,9 @@ namespace BasicManipulation
 
                 foreach (var programme in programmes)
                 {
-                    if (programme.name == programmeLabel.Content)
+                    if (programme.name == programmeLabel.Content.ToString())
                     {
-                        programmeToStudyTextBlock.Visibility = Visibility.Visible;
-                        learnMoreFromCareer.Visibility = Visibility.Collapsed;
-                        learnMoreFromProgramme.Visibility = Visibility.Visible;
-                        programmeToStudyTextBlock.Text = DatabaseConnection.readProgrammeName(programme.id) + " (" + programme.id + ")" + "\n\n"
+                        programmePageTBRight.Text = DatabaseConnection.readProgrammeName(programme.id) + " (" + programme.id + ")" + "\n\n"
                             + DatabaseConnection.readProgrammeDescription(programme.id);
 
                         selectedProgramme = programme;
@@ -274,6 +248,9 @@ namespace BasicManipulation
             }
         }
 
+        /// <summary>
+        /// Handles the career selection.
+        /// </summary>
         private void careerTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             TreeViewItem tvi = (TreeViewItem)e.NewValue;
@@ -288,35 +265,25 @@ namespace BasicManipulation
 
                 foreach(var career in careers)
                 {
-                    if (career.name == careerLabel.Content)
+                    if (career.name == careerLabel.Content.ToString())
                     {
                         selectedCareer = null;
-                        learnMoreFromCareer.Visibility = Visibility.Visible;
-                        //programmeToStudyTextBlock.Visibility = Visibility.Visible;
-
-                        Random rnd = new Random();
-                        int imageNum = rnd.Next(1, 6);
-                        Utilities.hideImages(careerImages, imageNum);
-
-                        // TODO: layout the Career description in the programmeToStudyTextBlock
-                        //
-                        //programmeToStudyTextBlock.Text = career.description;
 
                         // Set the final courses for this career
                         //
-                        finalCoursesGrid.Items.Clear();
+                        careerFinalCoursesGrid.Items.Clear();
                         List<Course> finalCoursesToTake = DatabaseConnection.readCareerFinalCourses(career);
                         foreach(Course course in finalCoursesToTake)
                         {
-                            finalCoursesGrid.Items.Add(new CareerInfoDataItem() { finalCourse = course.id +  " - " + course.name });
+                            careerFinalCoursesGrid.Items.Add(new CareerInfoDataItem() { finalCourse = course.id + " - " + course.name });
                         }
                         // Workaround to fill the table
                         //
                         for (int i = 0; i < 5; i++)
                         {
-                            finalCoursesGrid.Items.Add(new CareerInfoDataItem() { finalCourse = "" });
+                            careerFinalCoursesGrid.Items.Add(new CareerInfoDataItem() { finalCourse = "" });
                         }
-                        finalCoursesGrid.Visibility = Visibility.Visible;
+                        //careerFinalCoursesGrid.Visibility = Visibility.Visible;
 
                         if (selectedCareer == null)
                         {
@@ -338,64 +305,59 @@ namespace BasicManipulation
             }
         }
 
+        /// <summary>
+        /// Handles the clicking of the Programme button.
+        /// </summary>
         private void programmesButton_Click(object sender, RoutedEventArgs e)
         {
-            careerLabel.Text = CommonInternals.ECE_HEADER3;
-            programmeToStudyTextBlock.Visibility = Visibility.Collapsed;
-            eceWelcomeTextBlock.Visibility = Visibility.Collapsed;
-            learnMoreFromCareer.Visibility = Visibility.Collapsed;
-            cseLabel.Visibility = Visibility.Collapsed;
-            eeeLabel.Visibility = Visibility.Collapsed;
-            seLabel.Visibility = Visibility.Collapsed;
-            coursesGrid.Visibility = Visibility.Collapsed;
-            careerTreeView.Visibility = Visibility.Collapsed;
-            learnMoreFromCareer.Visibility = Visibility.Collapsed;
-            learnMoreFromProgramme.Visibility = Visibility.Collapsed;
-            finalCoursesGrid.Visibility = Visibility.Collapsed;
-            programmeToStudyLabel.Text = "";
-            Utilities.hideImages(careerImages);
+            programmePageGrid.Visibility = Visibility.Visible;
 
-            programmeTreeView.Visibility = Visibility.Visible;
-            careerLabel.Visibility = Visibility.Visible;
-            programmeToStudyLabel.Visibility = Visibility.Visible;
+            mainPageGrid.Visibility = Visibility.Collapsed;
+            careerPageGrid.Visibility = Visibility.Collapsed;
+            coursePageGrid.Visibility = Visibility.Collapsed;
+
             generateProgrammesTreeView();
         }
 
+        /// <summary>
+        /// Handles the clicking of the Lear More button of the Career page.
+        /// </summary>
         private void learnMoreFromCareer_Click(object sender, RoutedEventArgs e)
         {
             isSetCareer = true;
             isSetCourse = false;
             isSetProgramme = false;
 
-            showProgrammesWindow();
+            if(careerFinalCoursesGrid.Items.Count != 0)
+            {
+                if (selectedCareer != null)
+                {
+                    showProgrammesWindow();
+                }
+            }
+            else
+            {
+                Logger.Error("A single Career was not selected.");
+                MessageBox.Show("Please select a Career from the list.", "Career Selection", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         private void showProgrammesWindow()
         {
             ProgrammeWindow programmeWindow = new ProgrammeWindow(this);
-            Hide();
             programmeWindow.Show();
+            Hide();
         }
 
         private void coursesButton_Click(object sender, RoutedEventArgs e)
         {
-            programmeToStudyTextBlock.Visibility = Visibility.Collapsed;
-            eceWelcomeTextBlock.Visibility = Visibility.Collapsed;
-            careerLabel.Visibility = Visibility.Collapsed;
-            programmeToStudyLabel.Visibility = Visibility.Collapsed;
-            careerTreeView.Visibility = Visibility.Collapsed;
-            programmeTreeView.Visibility = Visibility.Collapsed;
-            learnMoreFromCareer.Visibility = Visibility.Collapsed;
-            learnMoreFromProgramme.Visibility = Visibility.Collapsed;
-            finalCoursesGrid.Visibility = Visibility.Collapsed;
-            Utilities.hideImages(careerImages);
+            coursePageGrid.Visibility = Visibility.Visible;
 
-            cseLabel.Visibility = Visibility.Visible;
-            eeeLabel.Visibility = Visibility.Visible;
-            seLabel.Visibility = Visibility.Visible;
-            coursesGrid.Visibility = Visibility.Visible;
+            mainPageGrid.Visibility = Visibility.Collapsed;
+            careerPageGrid.Visibility = Visibility.Collapsed;
+            programmePageGrid.Visibility = Visibility.Collapsed;
 
-            // Generate course for each programme
+            // Generate courses for each programme
             //
             generateCoursesTreeView();
         }
@@ -464,7 +426,7 @@ namespace BasicManipulation
                     // Label
                     //
                     Label lbl = new Label();
-                    lbl.Content = tempCoursesFromProgramme.ElementAt(i).id;
+                    lbl.Content = tempCoursesFromProgramme.ElementAt(i).id + " - " + tempCoursesFromProgramme.ElementAt(i).name;
 
 
                     // Add into stack
@@ -499,13 +461,34 @@ namespace BasicManipulation
                 StackPanel itemHeader = (StackPanel)((TreeViewItem)((TreeView)sender).SelectedItem).Header;
 
                 var courseId = itemHeader.Children.OfType<Label>().FirstOrDefault();
-                selectedCourse = DatabaseConnection.getCourse(courseId.Content.ToString());
 
-                isSetCareer = false;
-                isSetCourse = true;
-                isSetProgramme = false;
+                // Split the label [COURSEID - COURSENAME]
+                //
+                char[] delimiter = {'-'};
+                String[] selectedCourseName = courseId.Content.ToString().Split(delimiter);
+                if (selectedCourseName[0] != null)
+                {
+                    selectedCourse = DatabaseConnection.getCourse(selectedCourseName[0].Trim());
 
-                showProgrammesWindow();
+                    // Make sure we have a valid course
+                    //
+                    if (selectedCourse != null)
+                    {
+                        isSetCareer = false;
+                        isSetCourse = true;
+                        isSetProgramme = false;
+
+                        showProgrammesWindow();
+                    }
+                    else
+                    {
+                        Logger.Error("DepartmentWindow::seTreeView_SelectedItemChanged() Unknown course ID: " + selectedCourseName[0]);
+                    }
+                }
+                else
+                {
+                    Logger.Error("DepartmentWindow::seTreeView_SelectedItemChanged() Unable to resolve course ID: " + selectedCourseName[0]);
+                }
             }
         }
 
@@ -515,7 +498,15 @@ namespace BasicManipulation
             isSetCourse = false;
             isSetProgramme = true;
 
-            showProgrammesWindow();
+            if (selectedProgramme != null)
+            {
+                showProgrammesWindow();
+            }
+            else
+            {
+                Logger.Error("A single Programme was not selected.");
+                MessageBox.Show("Please select a Programme from the list.", "Programme Selection", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
     }
 }

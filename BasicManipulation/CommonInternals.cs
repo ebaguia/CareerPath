@@ -66,7 +66,8 @@ namespace BasicManipulation
         //
         public const String ECE_SLOGAN = "We are committed to research and dedicated to the pursuit of execellence in teaching, innovation and knowledge.";
 
-        public const int COURSE_BUTTON_GAP = 10;
+        public const int COURSE_BUTTON_LEFT_GAP = 10;
+        public const int COURSE_BUTTON_TOP_GAP = 30;
 
         public const int TOTAL_YEARS = 4;
 

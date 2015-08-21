@@ -129,8 +129,14 @@
   <data name="courseIcon" xml:space="preserve">
     <value>C:\Users\ebag753\Documents\Visual Studio 2013\Projects\BasicManipulation\BasicManipulation\icons\course_icon.png</value>
   </data>
+  <data name="eceCareerGifImage" xml:space="preserve">
+    <value>C:\Users\ebag753\Documents\UoA\Tasks\C_C_Demo\Downloads\career_images\eceCareerGifImage.gif</value>
+  </data>
   <data name="eceFacultyLogo" xml:space="preserve">
     <value>C:\Users\ebag753\Documents\Visual Studio 2013\Projects\BasicManipulation\BasicManipulation\icons\FacultyEngineeringLogo.png</value>
+  </data>
+  <data name="eceGifImage" xml:space="preserve">
+    <value>C:\Users\ebag753\Documents\UoA\Tasks\C_C_Demo\Downloads\gif\eceGifImage.gif</value>
   </data>
   <data name="highPowerElectronics" xml:space="preserve">
     <value>C:\Users\ebag753\Documents\UoA\Tasks\C_C_Demo\Downloads\career_images\power_elec.png</value>
@@ -148,7 +154,7 @@
     <value>C:\Users\ebag753\Documents\UoA\Tasks\C_C_Demo\Downloads\career_images\career_robotics.png</value>
   </data>
   <data name="universityLog" xml:space="preserve">
-    <value>C:\Users\ebag753\Documents\Visual Studio 2013\Projects\BasicManipulation\BasicManipulation\icons\UoA_logo1.png</value>
+    <value>C:\Users\ebag753\Documents\Visual Studio 2013\Projects\BasicManipulation\BasicManipulation\icons\logo.png</value>
   </data>
   <data name="wirelessCommunication" xml:space="preserve">
     <value>C:\Users\ebag753\Documents\UoA\Tasks\C_C_Demo\Downloads\career_images\wireless_comm.png</value>

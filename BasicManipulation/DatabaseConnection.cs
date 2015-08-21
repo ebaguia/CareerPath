@@ -127,9 +127,6 @@ namespace BasicManipulation
                                 dataReaderTemp["COURSECOMP"].ToString(),
                                 dataReaderTemp["GRADINGBASIS"].ToString(),
                                 dataReaderTemp["TYPOFFERED"].ToString(),
-                                dataReaderTemp["RESTR"].ToString(),
-                                dataReaderTemp["PREREQ"].ToString(),
-                                dataReaderTemp["COREQ"].ToString(),
                                 dataReaderTemp["REMARKS"].ToString(),
                                 dataReaderTemp["CAREERID"].ToString());
                     }
@@ -242,9 +239,6 @@ namespace BasicManipulation
                         dataReader["COURSECOMP"].ToString(),
                         dataReader["GRADINGBASIS"].ToString(),
                         dataReader["TYPOFFERED"].ToString(),
-                        dataReader["RESTR"].ToString(),
-                        dataReader["PREREQ"].ToString(),
-                        dataReader["COREQ"].ToString(),
                         dataReader["REMARKS"].ToString(),
                         dataReader["CAREERID"].ToString());
                     courses.Add(course);
@@ -282,9 +276,6 @@ namespace BasicManipulation
                         dataReader["COURSECOMP"].ToString(),
                         dataReader["GRADINGBASIS"].ToString(),
                         dataReader["TYPOFFERED"].ToString(),
-                        dataReader["RESTR"].ToString(),
-                        dataReader["PREREQ"].ToString(),
-                        dataReader["COREQ"].ToString(),
                         dataReader["REMARKS"].ToString(),
                         dataReader["CAREERID"].ToString());
                     Logger.Info("[DatabaseConnection::getCourse()]" + "\nID: " + course.id + "\nNAME: " + course.name + "\nDESC: " + course.description);
@@ -340,9 +331,6 @@ SELECT COURSEID FROM PreRequisite
                                 dataReaderTemp["COURSECOMP"].ToString(),
                                 dataReaderTemp["GRADINGBASIS"].ToString(),
                                 dataReaderTemp["TYPOFFERED"].ToString(),
-                                dataReaderTemp["RESTR"].ToString(),
-                                dataReaderTemp["PREREQ"].ToString(),
-                                dataReaderTemp["COREQ"].ToString(),
                                 dataReaderTemp["REMARKS"].ToString(),
                                 dataReaderTemp["CAREERID"].ToString());
                     }
@@ -388,9 +376,6 @@ SELECT COURSEID FROM PreRequisite
                         dataReader["COURSECOMP"].ToString(),
                         dataReader["GRADINGBASIS"].ToString(),
                         dataReader["TYPOFFERED"].ToString(),
-                        dataReader["RESTR"].ToString(),
-                        dataReader["PREREQ"].ToString(),
-                        dataReader["COREQ"].ToString(),
                         dataReader["REMARKS"].ToString(),
                         dataReader["CAREERID"].ToString());
 
@@ -426,9 +411,6 @@ SELECT COURSEID FROM PreRequisite
                                 dataReaderTemp["COURSECOMP"].ToString(),
                                 dataReaderTemp["GRADINGBASIS"].ToString(),
                                 dataReaderTemp["TYPOFFERED"].ToString(),
-                                dataReaderTemp["RESTR"].ToString(),
-                                dataReaderTemp["PREREQ"].ToString(),
-                                dataReaderTemp["COREQ"].ToString(),
                                 dataReaderTemp["REMARKS"].ToString(),
                                 dataReaderTemp["CAREERID"].ToString());
 
@@ -480,9 +462,6 @@ SELECT COURSEID FROM PreRequisite
                                 dataReaderTemp["COURSECOMP"].ToString(),
                                 dataReaderTemp["GRADINGBASIS"].ToString(),
                                 dataReaderTemp["TYPOFFERED"].ToString(),
-                                dataReaderTemp["RESTR"].ToString(),
-                                dataReaderTemp["PREREQ"].ToString(),
-                                dataReaderTemp["COREQ"].ToString(),
                                 dataReaderTemp["REMARKS"].ToString(),
                                 dataReaderTemp["CAREERID"].ToString());
 
@@ -533,9 +512,6 @@ SELECT COURSEID FROM PreRequisite
                                 dataReaderTemp["COURSECOMP"].ToString(),
                                 dataReaderTemp["GRADINGBASIS"].ToString(),
                                 dataReaderTemp["TYPOFFERED"].ToString(),
-                                dataReaderTemp["RESTR"].ToString(),
-                                dataReaderTemp["PREREQ"].ToString(),
-                                dataReaderTemp["COREQ"].ToString(),
                                 dataReaderTemp["REMARKS"].ToString(),
                                 dataReaderTemp["CAREERID"].ToString());
 
@@ -612,9 +588,6 @@ SELECT COURSEID FROM PreRequisite
                                 dataReaderTemp["COURSECOMP"].ToString(),
                                 dataReaderTemp["GRADINGBASIS"].ToString(),
                                 dataReaderTemp["TYPOFFERED"].ToString(),
-                                dataReaderTemp["RESTR"].ToString(),
-                                dataReaderTemp["PREREQ"].ToString(),
-                                dataReaderTemp["COREQ"].ToString(),
                                 dataReaderTemp["REMARKS"].ToString(),
                                 dataReaderTemp["CAREERID"].ToString());
 

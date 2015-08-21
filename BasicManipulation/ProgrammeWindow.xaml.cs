@@ -60,10 +60,10 @@ namespace BasicManipulation
         private void backButton_Click(object sender, RoutedEventArgs e)
         {
             coursePathCanvas.Children.Clear();
-            Hide();
             if (departmentWindow != null)
             {
                 departmentWindow.Show();
+                Close();
             }
         }
 
@@ -394,21 +394,33 @@ namespace BasicManipulation
         public void setCoursePath(String topCourseId)
         {
             Course topCourse = DatabaseConnection.getCourse(topCourseId);
+            if(topCourse == null)
+            {
+                return;
+            }
+
             topCourse.setType(getCourseType(topCourse));
 
             // First sem courses should be in the left
             //
-            double year4StartXLocation1 = coursePathCanvas.Width - ((coursePathCanvas.Width / 4) - 100) - 35;
-            double year3StartXLocation1 = coursePathCanvas.Width - (((coursePathCanvas.Width / 4) * 2) - 100) - 35;
-            double year2StartXLocation1 = coursePathCanvas.Width - (((coursePathCanvas.Width / 4) * 3) - 100) - 35;
-            double year1StartXLocation1 = coursePathCanvas.Width - (coursePathCanvas.Width - 100) - 35;
+            double year4StartXLocation1 = Canvas.GetLeft(dashLine3) + CommonInternals.COURSE_BUTTON_TOP_GAP;
+            double year3StartXLocation1 = Canvas.GetLeft(dashLine2) + CommonInternals.COURSE_BUTTON_TOP_GAP;
+            double year2StartXLocation1 = Canvas.GetLeft(dashLine1) + CommonInternals.COURSE_BUTTON_TOP_GAP;
+            double year1StartXLocation1 = CommonInternals.COURSE_BUTTON_TOP_GAP;
 
-            // Second sem courses should be in the left
+            // Second sem courses should be in the right
             //
-            double year4StartXLocation2 = coursePathCanvas.Width - ((coursePathCanvas.Width / 4) - 100) + 25;
-            double year3StartXLocation2 = coursePathCanvas.Width - (((coursePathCanvas.Width / 4) * 2) - 100) + 25;
-            double year2StartXLocation2 = coursePathCanvas.Width - (((coursePathCanvas.Width / 4) * 3) - 100) + 25;
-            double year1StartXLocation2 = coursePathCanvas.Width - (coursePathCanvas.Width - 100) + 25;
+            double year4StartXLocation2 = coursePathCanvas.Width - CommonInternals.COURSE_BUTTON_TOP_GAP - topCourse.courseButton.Width;
+            double year3StartXLocation2 = Canvas.GetLeft(dashLine3) - CommonInternals.COURSE_BUTTON_TOP_GAP - topCourse.courseButton.Width;
+            double year2StartXLocation2 = Canvas.GetLeft(dashLine2) - CommonInternals.COURSE_BUTTON_TOP_GAP - topCourse.courseButton.Width;
+            double year1StartXLocation2 = Canvas.GetLeft(dashLine1) - CommonInternals.COURSE_BUTTON_TOP_GAP - topCourse.courseButton.Width;
+
+            // Course can be taken in any semester - place this in the center
+            //
+            double year4StartXLocation0 = Canvas.GetLeft(dashLine3) + ((coursePathCanvas.Width - Canvas.GetLeft(dashLine3)) / 2) - (topCourse.courseButton.Width / 2);
+            double year3StartXLocation0 = Canvas.GetLeft(dashLine2) + ((Canvas.GetLeft(dashLine3) - Canvas.GetLeft(dashLine2)) / 2) - (topCourse.courseButton.Width / 2);
+            double year2StartXLocation0 = Canvas.GetLeft(dashLine1) + ((Canvas.GetLeft(dashLine2) - Canvas.GetLeft(dashLine1)) / 2) - (topCourse.courseButton.Width / 2);
+            double year1StartXLocation0 = (Canvas.GetLeft(dashLine1) / 2) - (topCourse.courseButton.Width / 2);
 
             // Making sure things will not mess up
             //
@@ -417,109 +429,108 @@ namespace BasicManipulation
                 // Populating the top most course
                 //
                 double previousStartX = 0;
-                double previousStartY = CommonInternals.COURSE_BUTTON_GAP;
+                double previousStartY = CommonInternals.COURSE_BUTTON_LEFT_GAP;
+
                 Course existingCourse = getCourseFromCanvas(topCourse);
-
-                // Start from the previous and existing course
-                //
-                if (existingCourse != null)
-                {
-                    previousStartY = Canvas.GetLeft(existingCourse.courseButton);
-                }
-
-                if (topCourse.year == 4)
-                {
-                    if (topCourse.sem == 1)
-                    {
-                        // Course should be taken in the 1st sem - place this in the left
-                        //
-                        previousStartX = year4StartXLocation1;
-                    }
-                    else if (topCourse.sem == 2)
-                    {
-                        // Course should be taken in the 2nd sem - place this in the right
-                        //
-                        previousStartX = year4StartXLocation2;
-                    }
-                    else
-                    {
-                        // Course can be taken in any semester - place this in the center
-                        //
-                        previousStartX = year4StartXLocation2 - 25;
-                    }
-
-                    for (int i = 0; isCoursePointYExist(previousStartY, collectionOflistOfY[(int)CommonInternals.CourseYear.FOURTH_YEAR]); i++)
-                    {
-                        previousStartY += topCourse.courseButton.Height + CommonInternals.COURSE_BUTTON_GAP;
-                    }
-                    collectionOflistOfY[(int)CommonInternals.CourseYear.FOURTH_YEAR].Add(previousStartY);
-                }
-                else if (topCourse.year == 3)
-                {
-                    if (topCourse.sem == 1)
-                    {
-                        previousStartX = year3StartXLocation1;
-                    }
-                    else if (topCourse.sem == 2)
-                    {
-                        previousStartX = year3StartXLocation2;
-                    }
-                    else
-                    {
-                        previousStartX = year3StartXLocation2 - 25;
-                    }
-
-                    for (int i = 0; isCoursePointYExist(previousStartY, collectionOflistOfY[(int)CommonInternals.CourseYear.THIRD_YEAR]) == true; i++)
-                    {
-                        previousStartY += topCourse.courseButton.Height + CommonInternals.COURSE_BUTTON_GAP;
-                    }
-                    collectionOflistOfY[(int)CommonInternals.CourseYear.THIRD_YEAR].Add(previousStartY);
-                }
-                else if (topCourse.year == 2)
-                {
-                    if (topCourse.sem == 1)
-                    {
-                        previousStartX = year2StartXLocation1;
-                    }
-                    else if (topCourse.sem == 2)
-                    {
-                        previousStartX = year2StartXLocation2;
-                    }
-                    else
-                    {
-                        previousStartX = year2StartXLocation2 - 25;
-                    }
-
-                    for (int i = 0; isCoursePointYExist(previousStartY, collectionOflistOfY[(int)CommonInternals.CourseYear.SECOND_YEAR]) == true; i++)
-                    {
-                        previousStartY += topCourse.courseButton.Height + CommonInternals.COURSE_BUTTON_GAP;
-                    }
-                    collectionOflistOfY[(int)CommonInternals.CourseYear.SECOND_YEAR].Add(previousStartY);
-                }
-                else if(topCourse.year == 1)
-                {
-                    if (topCourse.sem == 1)
-                    {
-                        previousStartX = year1StartXLocation1;
-                    }
-                    else if (topCourse.sem == 2)
-                    {
-                        previousStartX = year1StartXLocation2;
-                    }
-                    else
-                    {
-                        previousStartX = year1StartXLocation2 - 25;
-                    }
-
-                    for (int i = 0; isCoursePointYExist(previousStartY, collectionOflistOfY[(int)CommonInternals.CourseYear.FIRST_YEAR]) == true; i++)
-                    {
-                        previousStartY += topCourse.courseButton.Height + CommonInternals.COURSE_BUTTON_GAP;
-                    }
-                    collectionOflistOfY[(int)CommonInternals.CourseYear.FIRST_YEAR].Add(previousStartY);
-                }
-
                 if (existingCourse == null)
                 {
+                    if (topCourse.year == 4)
+                    {
+                        if (topCourse.sem == 1)
+                        {
+                            // Course should be taken in the 1st sem - place this in the left
+                            //
+                            previousStartX = year4StartXLocation1;
+                        }
+                        else if (topCourse.sem == 2)
+                        {
+                            // Course should be taken in the 2nd sem - place this in the right
+                            //
+                            previousStartX = year4StartXLocation2;
+                        }
+                        else
+                        {
+                            // Course can be taken in any semester - place this in the center
+                            //
+                            previousStartX = year4StartXLocation0;
+                        }
+
+                        for (int i = 0; isCoursePointYExist(previousStartY, collectionOflistOfY[(int)CommonInternals.CourseYear.FOURTH_YEAR]); i++)
+                        {
+                            previousStartY += topCourse.courseButton.Height + CommonInternals.COURSE_BUTTON_LEFT_GAP;
+                        }
+                        collectionOflistOfY[(int)CommonInternals.CourseYear.FOURTH_YEAR].Add(previousStartY);
+                    }
+                    else if (topCourse.year == 3)
+                    {
+                        if (topCourse.sem == 1)
+                        {
+                            previousStartX = year3StartXLocation1;
+                        }
+                        else if (topCourse.sem == 2)
+                        {
+                            previousStartX = year3StartXLocation2;
+                        }
+                        else
+                        {
+                            // Course can be taken in any semester - place this in the center
+                            //
+                            previousStartX = year3StartXLocation0;
+                        }
+
+                        for (int i = 0; isCoursePointYExist(previousStartY, collectionOflistOfY[(int)CommonInternals.CourseYear.THIRD_YEAR]) == true; i++)
+                        {
+                            previousStartY += topCourse.courseButton.Height + CommonInternals.COURSE_BUTTON_LEFT_GAP;
+                        }
+                        collectionOflistOfY[(int)CommonInternals.CourseYear.THIRD_YEAR].Add(previousStartY);
+                    }
+                    else if (topCourse.year == 2)
+                    {
+                        if (topCourse.sem == 1)
+                        {
+                            previousStartX = year2StartXLocation1;
+                        }
+                        else if (topCourse.sem == 2)
+                        {
+                            previousStartX = year2StartXLocation2;
+                        }
+                        else
+                        {
+                            // Course can be taken in any semester - place this in the center
+                            //
+                            previousStartX = year2StartXLocation0;
+                        }
+
+                        for (int i = 0; isCoursePointYExist(previousStartY, collectionOflistOfY[(int)CommonInternals.CourseYear.SECOND_YEAR]) == true; i++)
+                        {
+                            previousStartY += topCourse.courseButton.Height + CommonInternals.COURSE_BUTTON_LEFT_GAP;
+                        }
+                        collectionOflistOfY[(int)CommonInternals.CourseYear.SECOND_YEAR].Add(previousStartY);
+                    }
+                    else if (topCourse.year == 1)
+                    {
+                        if (topCourse.sem == 1)
+                        {
+                            previousStartX = year1StartXLocation1;
+                        }
+                        else if (topCourse.sem == 2)
+                        {
+                            previousStartX = year1StartXLocation2;
+                        }
+                        else
+                        {
+                            // Course can be taken in any semester - place this in the center
+                            //
+                            previousStartX = year1StartXLocation0;
+                        }
+
+                        for (int i = 0; isCoursePointYExist(previousStartY, collectionOflistOfY[(int)CommonInternals.CourseYear.FIRST_YEAR]) == true; i++)
+                        {
+                            previousStartY += topCourse.courseButton.Height + CommonInternals.COURSE_BUTTON_LEFT_GAP;
+                        }
+                        collectionOflistOfY[(int)CommonInternals.CourseYear.FIRST_YEAR].Add(previousStartY);
+                    }
+
                     coursePathCanvas.Children.Add(topCourse.courseButton);
                     Canvas.SetLeft(topCourse.courseButton, previousStartX);
                     Canvas.SetTop(topCourse.courseButton, previousStartY);
@@ -547,7 +558,7 @@ namespace BasicManipulation
                     Course course = courses.ElementAt(i);
                     course.setType(getCourseType(course));
 
-                    previousStartY = CommonInternals.COURSE_BUTTON_GAP;
+                    previousStartY = CommonInternals.COURSE_BUTTON_LEFT_GAP;
                     Course existingCourse2 = getCourseFromCanvas(course);
                     if (existingCourse2 == null)
                     {
@@ -563,12 +574,18 @@ namespace BasicManipulation
                             {
                                 previousStartX = year4StartXLocation2;
                             }
+                            else
+                            {
+                                // Course can be taken in any semester - place this in the center
+                                //
+                                previousStartX = year4StartXLocation0;
+                            }
 
                             // Move new courses to the end of the list - descending
                             //
                             while (isCoursePointYExist(previousStartY, collectionOflistOfY[(int)CommonInternals.CourseYear.FOURTH_YEAR]))
                             {
-                                previousStartY += course.courseButton.Height + CommonInternals.COURSE_BUTTON_GAP;
+                                previousStartY += course.courseButton.Height + CommonInternals.COURSE_BUTTON_LEFT_GAP;
                             }
                             collectionOflistOfY[(int)CommonInternals.CourseYear.FOURTH_YEAR].Add(previousStartY);
                         }
@@ -582,19 +599,19 @@ namespace BasicManipulation
                             {
                                 previousStartX = year3StartXLocation2;
                             }
-
-                            foreach(double y in collectionOflistOfY[(int)CommonInternals.CourseYear.THIRD_YEAR])
+                            else
                             {
-                                Logger.Debug("ACHTUNG listOfY: " + y);
+                                // Course can be taken in any semester - place this in the center
+                                //
+                                previousStartX = year3StartXLocation0;
                             }
 
-                            // this course goes below
+                            // Move new courses to the end of the list - descending
                             //
                             while (isCoursePointYExist(previousStartY, collectionOflistOfY[(int)CommonInternals.CourseYear.THIRD_YEAR]))
                             {
-                                previousStartY += course.courseButton.Height + CommonInternals.COURSE_BUTTON_GAP;
+                                previousStartY += course.courseButton.Height + CommonInternals.COURSE_BUTTON_LEFT_GAP;
                             }
-                            Logger.Debug("ACHTUNG PreReqCourse Y ADD[" + course.id + "] Y: " + previousStartY);
                             collectionOflistOfY[(int)CommonInternals.CourseYear.THIRD_YEAR].Add(previousStartY);
                         }
                         else if (course.year == 2)
@@ -607,12 +624,18 @@ namespace BasicManipulation
                             {
                                 previousStartX = year2StartXLocation2;
                             }
+                            else
+                            {
+                                // Course can be taken in any semester - place this in the center
+                                //
+                                previousStartX = year2StartXLocation0;
+                            }
 
-                            // this course goes below
+                            // Move new courses to the end of the list - descending
                             //
                             while (isCoursePointYExist(previousStartY, collectionOflistOfY[(int)CommonInternals.CourseYear.SECOND_YEAR]))
                             {
-                                previousStartY += course.courseButton.Height + CommonInternals.COURSE_BUTTON_GAP;
+                                previousStartY += course.courseButton.Height + CommonInternals.COURSE_BUTTON_LEFT_GAP;
                             }
                             collectionOflistOfY[(int)CommonInternals.CourseYear.SECOND_YEAR].Add(previousStartY);
                         }
@@ -626,12 +649,18 @@ namespace BasicManipulation
                             {
                                 previousStartX = year1StartXLocation2;
                             }
+                            else
+                            {
+                                // Course can be taken in any semester - place this in the center
+                                //
+                                previousStartX = year1StartXLocation0; ;
+                            }
 
-                            // this course goes below
+                            // Move new courses to the end of the list - descending
                             //
                             while (isCoursePointYExist(previousStartY, collectionOflistOfY[(int)CommonInternals.CourseYear.FIRST_YEAR]))
                             {
-                                previousStartY += course.courseButton.Height + CommonInternals.COURSE_BUTTON_GAP;
+                                previousStartY += course.courseButton.Height + CommonInternals.COURSE_BUTTON_LEFT_GAP;
                             }
                             collectionOflistOfY[(int)CommonInternals.CourseYear.FIRST_YEAR].Add(previousStartY);
                         }
@@ -649,9 +678,12 @@ namespace BasicManipulation
                         course = existingCourse2;
                     }
 
-                    Logger.Debug("ACHTUNG PreReqCourse[" + course.id + "] Y: " + previousStartY);
+                    // Sets the location where to start drawing the Line connecting the courses
+                    //
                     Point relativePointEllipse1 = new Point(previousStartX + (topcourseButtonRect.Width), previousStartY + (topcourseButtonRect.Height / 2));
 
+                    // For now, we do not need to create a course connecting line of both courses are in the same year.
+                    //
                     if (topCourse.year != course.year)
                     {
                         var points = Utilities.CreateLineWithArrowPointCollection(new Point(relativePointEllipse1.X, relativePointEllipse1.Y),

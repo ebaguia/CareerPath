@@ -30,8 +30,8 @@ namespace BasicManipulation
         {
             Logger.Debug("Loading DepartmentWindow");
             DepartmentWindow departmentWindow = new DepartmentWindow(this);
-            Hide();
             departmentWindow.Show();
+            Hide();
         }
     }
 }

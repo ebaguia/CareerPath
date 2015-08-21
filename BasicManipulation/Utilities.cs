@@ -103,6 +103,11 @@ namespace BasicManipulation
             courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Course", description = course.id });
             courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Name", description = course.name });
             courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Description", description = course.description });
+            courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Academic Organization", description = course.academicOrg });
+            courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Academic Group", description = course.academicGroup });
+            courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Course Component", description = course.courseComp });
+            courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Grading Basis", description = course.gradingBasis });
+            courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Typically Offered", description = course.typeOffered });
             courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Prerequisite(s)", description = preReqString });
             courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "Restrictions(s)", description = restrString });
 
@@ -111,21 +116,6 @@ namespace BasicManipulation
             //courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "", description = "" });
             //courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "", description = "" });
             //courseInfoDataGrid.Items.Add(new CourseInfoDataItem() { item = "", description = "" });
-        }
-
-        public static void hideImages(Image[] images, int except = -1)
-        {
-            for (int i = 0; i < images.Length; i++)
-            {
-                if (i == except)
-                {
-                    images[i].Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    images[i].Visibility = Visibility.Collapsed;
-                }
-            }
         }
     }
 }

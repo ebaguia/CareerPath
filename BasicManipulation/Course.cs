@@ -32,9 +32,6 @@ namespace BasicManipulation
                     String courseComp, 
                     String gradingBasis, 
                     String typeOffered,
-                    String restr = "",
-                    String preReq = "",
-                    String coReq = "",
                     String remarks = "",
                     String careerId = "",
                     CommonInternals.CourseType type=CommonInternals.CourseType.ELECTIVE)
@@ -50,9 +47,6 @@ namespace BasicManipulation
             this.courseComp = courseComp;
             this.gradingBasis = gradingBasis;
             this.typeOffered = typeOffered;
-            this.restr = restr;
-            this.preReq = preReq;
-            this.coReq = coReq;
             this.remarks = remarks;
             this.careerId = careerId;
             this.type = type;
@@ -109,9 +103,6 @@ namespace BasicManipulation
         public String courseComp { get; set; }
         public String gradingBasis { get; set; }
         public String typeOffered { get; set; }
-        public String restr { get; set; }
-        public String preReq { get; set; }
-        public String coReq { get; set; }
         public String remarks { get; set; }
         public String careerId { get; set; }
 
