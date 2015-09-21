@@ -66,12 +66,12 @@ namespace BasicManipulation
         //
         public const String ECE_SLOGAN = "We are committed to research and dedicated to the pursuit of execellence in teaching, innovation and knowledge.";
 
-        public const int COURSE_BUTTON_LEFT_GAP = 10;
-        public const int COURSE_BUTTON_TOP_GAP = 30;
+        public const int COURSE_BUTTON_LEFT_GAP = 30;
+        public const int COURSE_BUTTON_TOP_GAP = 20;
 
         public const int TOTAL_YEARS = 4;
 
-        public const int TREE_COURSE_BUTTON_HEIGHT = 40;
+        public const int TREE_COURSE_BUTTON_HEIGHT = 50;
         public const int TREE_COURSE_BUTTON_WIDTH = 210;
     }
 }

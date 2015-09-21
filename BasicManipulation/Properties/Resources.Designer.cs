@@ -115,7 +115,7 @@ namespace BasicManipulation.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to C:\Users\ebag753\Documents\UoA\Tasks\C_C_Demo\Downloads\gif\eceGifImage.gif.
+        ///   Looks up a localized string similar to C:\Users\ebag753\Documents\UoA\Tasks\C_C_Demo\Downloads\gif\eceGifImageUpdated.gif.
         /// </summary>
         public static string eceGifImage {
             get {

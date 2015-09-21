@@ -116,13 +116,13 @@ namespace BasicManipulation
 
                 // Create Image
                 //
-                Image image = new Image();
-                image.Source = new BitmapImage(new Uri(BasicManipulation.Properties.Resources.programmeIcon));
+                //Image image = new Image();
+                //image.Source = new BitmapImage(new Uri(BasicManipulation.Properties.Resources.programmeIcon));
 
                 // Part Label
                 //
                 Label partLabel = new Label();
-                partLabel.Content = "Part " + listOfParts.ElementAt(i);
+                partLabel.Content = "PART " + listOfParts.ElementAt(i);
 
                 List<Course> programmeCourses = DatabaseConnection.readCoursesUsingProgrammePart(departmentWindow.selectedProgramme, listOfParts.ElementAt(i));
                 foreach(Course programmeCourse in programmeCourses)
@@ -131,40 +131,13 @@ namespace BasicManipulation
 
                     programmeCourseItem.IsExpanded = false;
 
-                    // Create stack panel
-                    //
-                    StackPanel innerStack = new StackPanel();
-                    innerStack.Orientation = Orientation.Horizontal;
-                    innerStack.Background = background;
-                    background.Opacity = 100;
-
-                    // Course button
-                    //
-                    Button btn = new Button();
-                    btn.Height = CommonInternals.TREE_COURSE_BUTTON_HEIGHT;
-                    btn.Width = CommonInternals.TREE_COURSE_BUTTON_WIDTH;
-                    btn.Content = programmeCourse.id;
-                    btn.Click += courseItemAction;
-
-                    // Create Image
-                    //
-                    Image innerImage = new Image();
-                    innerImage.Source = new BitmapImage(new Uri(BasicManipulation.Properties.Resources.courseIcon));
-
-                    // Add into stack
-                    //
-                    innerStack.Children.Add(innerImage);
-                    innerStack.Children.Add(btn);
-
-                    // assign stack to header
-                    //
-                    programmeCourseItem.Header = innerStack;
+                    createCourseListButton(programmeCourseItem, BasicManipulation.Properties.Resources.programmeIcon, programmeCourse.id);
 
                     partItems[i].Items.Add(programmeCourseItem);
                 }
 
                 // Add into stack
-                stack.Children.Add(image);
+                //stack.Children.Add(image);
                 stack.Children.Add(partLabel);
 
                 // assign stack to header
@@ -199,31 +172,7 @@ namespace BasicManipulation
 
                 finalCoursesItems[i].IsExpanded = false;
 
-                // create stack panel
-                StackPanel stack = new StackPanel();
-                stack.Orientation = Orientation.Horizontal;
-                var background = new SolidColorBrush(Colors.White);
-                stack.Background = background;
-                background.Opacity = 100;
-
-                // create Image
-                Image image = new Image();
-                image.Source = new BitmapImage(new Uri(BasicManipulation.Properties.Resources.courseIcon));
-
-                // Button
-                Button btn = new Button();
-                btn.Height = CommonInternals.TREE_COURSE_BUTTON_HEIGHT;
-                btn.Width = CommonInternals.TREE_COURSE_BUTTON_WIDTH;
-                btn.Content = finalCoursesToTake.ElementAt(i).id;
-                btn.Click += courseItemAction;
-
-
-                // Add into stack
-                stack.Children.Add(image);
-                stack.Children.Add(btn);
-
-                // assign stack to header
-                finalCoursesItems[i].Header = stack;
+                createCourseListButton(finalCoursesItems[i], BasicManipulation.Properties.Resources.programmeIcon, finalCoursesToTake.ElementAt(i).id);
 
                 treeView.Items.Add(finalCoursesItems[i]);
             }
@@ -242,36 +191,8 @@ namespace BasicManipulation
             courseItem.IsSelected = true;
             courseItem.IsExpanded = false;
 
-            // create stack panel
-            //
-            StackPanel stack = new StackPanel();
-            stack.Orientation = Orientation.Horizontal;
-            var background = new SolidColorBrush(Colors.White);
-            stack.Background = background;
-            background.Opacity = 100;
+            createCourseListButton(courseItem, BasicManipulation.Properties.Resources.programmeIcon, departmentWindow.selectedCourse.id);
 
-            // create Image
-            //
-            Image image = new Image();
-            image.Source = new BitmapImage(new Uri(BasicManipulation.Properties.Resources.courseIcon));
-
-            // Course Button
-            //
-            Button btn = new Button();
-            btn.Height = CommonInternals.TREE_COURSE_BUTTON_HEIGHT;
-            btn.Width = CommonInternals.TREE_COURSE_BUTTON_WIDTH;
-            btn.Content = departmentWindow.selectedCourse.id;
-            btn.Click += courseItemAction;
-
-
-            // Add into stack
-            //
-            stack.Children.Add(image);
-            stack.Children.Add(btn);
-
-            // assign stack to header
-            //
-            courseItem.Header = stack;
             treeView.Items.Add(courseItem);
         }
 
@@ -688,7 +609,7 @@ namespace BasicManipulation
                     {
                         var points = Utilities.CreateLineWithArrowPointCollection(new Point(relativePointEllipse1.X, relativePointEllipse1.Y),
                                                                         new Point(relativePointEllipse2Left.X, relativePointEllipse2Left.Y),
-                                                                        1);
+                                                                        1.25);
 
                         var polygon = new Polygon();
                         polygon.Points = points;
@@ -710,17 +631,17 @@ namespace BasicManipulation
                         {
                             // 3 points for pre-req which is in the previous sem
                             //
-                            Point[] points = new Point[4];
+                            Point[] points = new Point[3];
 
                             points[0] = new Point(relativePointEllipse1.X, relativePointEllipse1.Y);
-                            points[1] = new Point(relativePointEllipse1.X + (course.courseButton.Width / 3), relativePointEllipse1.Y);
-                            points[2] = new Point(Canvas.GetLeft(topCourse.courseButton) + topCourse.courseButton.Width + (course.courseButton.Width / 3), Canvas.GetTop(topCourse.courseButton) + (topCourse.courseButton.Height / 2));
-                            points[3] = new Point(Canvas.GetLeft(topCourse.courseButton) + topCourse.courseButton.Width, Canvas.GetTop(topCourse.courseButton) + (topCourse.courseButton.Height/2));
+                            points[1] = new Point(relativePointEllipse1.X + (course.courseButton.Width / 4) - 25, relativePointEllipse1.Y);
+                            points[2] = new Point(Canvas.GetLeft(topCourse.courseButton) + (topCourse.courseButton.Width / 2), Canvas.GetTop(topCourse.courseButton) + topCourse.courseButton.Height);
+                            //points[3] = new Point(Canvas.GetLeft(topCourse.courseButton) + topCourse.courseButton.Width, Canvas.GetTop(topCourse.courseButton) + (topCourse.courseButton.Height/2));
 
                             polygonPoints.Add(points[0]);
                             polygonPoints.Add(points[1]);
                             polygonPoints.Add(points[2]);
-                            polygonPoints.Add(points[3]);
+                            //polygonPoints.Add(points[3]);
                         }
                         else if (course.sem == 2)
                         {
@@ -738,7 +659,7 @@ namespace BasicManipulation
 
                         coursePathCanvas.Children.Add(courseConnectorePolyline);
                     }
-                    */ 
+                    */
                 }
             }
         }
@@ -771,6 +692,54 @@ namespace BasicManipulation
             }
 
             return isYExist;
+        }
+
+        private void createCourseListButton(TreeViewItem courseItem, String imageStringLocation, String buttonStringContent)
+        {
+            // create stack panel
+            //
+            StackPanel stack = new StackPanel();
+            stack.Orientation = Orientation.Horizontal;
+            
+            var background = new SolidColorBrush(Colors.White);
+            background.Opacity = 100;
+            stack.Background = background;
+
+            // create Image
+            //
+            Image image = new Image();
+            image.Source = new BitmapImage(new Uri(imageStringLocation));
+
+            // Course Button
+            //
+            Button btn = new Button();
+            btn.Height = CommonInternals.TREE_COURSE_BUTTON_HEIGHT;
+            btn.Width = CommonInternals.TREE_COURSE_BUTTON_WIDTH;
+            btn.Content = buttonStringContent;
+            btn.Click += courseItemAction;
+
+            RadialGradientBrush gradRadial = new RadialGradientBrush();
+            gradRadial.RadiusX = 0.25;
+            gradRadial.GradientOrigin = new Point(0.498, 0.526);
+            GradientStopCollection gradStopCollection = new GradientStopCollection();
+            gradStopCollection.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#FFF3F3F3"), 0));
+            gradStopCollection.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#FFEBEBEB"), 0.5));
+            gradStopCollection.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#FFDDDDDD"), 0.5));
+            gradStopCollection.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#FF94C4E0"), 1));
+            gradRadial.GradientStops = gradStopCollection;
+
+            btn.Background = gradRadial;
+
+            // Add into stack
+            //
+            stack.Children.Add(image);
+            stack.Children.Add(btn);
+
+            // assign stack to header
+            //
+            courseItem.Header = stack;
+
+            courseItem.Margin = new Thickness(5);
         }
     }
 }

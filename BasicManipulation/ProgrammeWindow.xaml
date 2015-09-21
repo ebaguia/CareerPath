@@ -72,7 +72,7 @@
                             <DropShadowEffect/>
                         </TextBlock.Effect>
                     </TextBlock>
-                    <TreeView Grid.Row="1" x:Name="treeView" FontWeight="Medium" FontFamily="Century Gothic" FontSize="25" Background="{x:Null}" BorderThickness="0" Margin="0,0,0,0" SelectedItemChanged="treeView_SelectedItemChanged" Padding="1,10,1,1"/>
+                    <TreeView Grid.Row="1" x:Name="treeView" FontWeight="Medium" FontFamily="Century Gothic" FontSize="25" Background="{x:Null}" BorderThickness="0" Margin="0,0,0,0" SelectedItemChanged="treeView_SelectedItemChanged" Padding="20,10,1,1"/>
                     <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1" Height="Auto">
                         <DataGrid Name="courseInfoDataGrid" ItemsSource="{Binding CourseInfo}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" CanUserSortColumns="False">
                             <DataGrid.ColumnHeaderStyle>

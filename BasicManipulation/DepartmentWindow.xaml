@@ -49,7 +49,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Border Grid.Column="0" BorderBrush="Black" BorderThickness="1">
+            <Border Grid.Column="0" BorderBrush="Black" BorderThickness="0.5">
                 <Grid x:Name="buttonsStackPanel" Height="Auto" Width="290">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -198,7 +198,7 @@
                     </Button>
                 </Grid>
             </Border>
-            <Border Grid.Column="1" BorderBrush="Black" BorderThickness="1" Height="Auto" Width="Auto">
+            <Border Grid.Column="1" BorderBrush="Black" BorderThickness="0.5" Height="Auto" Width="Auto">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -245,12 +245,12 @@
                                     <DropShadowEffect/>
                                 </TextBlock.Effect>
                             </TextBlock>
-                            <Border Grid.Row="1" Grid.Column="0" BorderBrush="Black" BorderThickness="1">
+                            <Border Grid.Row="1" Grid.Column="0" BorderBrush="Black" BorderThickness="0.5">
                                 <ScrollViewer Grid.Row="1" Grid.Column="0" VerticalScrollBarVisibility="Auto" Height="Auto" Width="Auto" Margin="0,10,0,0">
                                     <TextBlock x:Name="mainPageTBLeft" FontFamily="Century Gothic" FontSize="25" FontWeight="Medium" TextAlignment="Justify" RenderTransformOrigin="0.5,0.5" TextWrapping="Wrap" Padding="10"/>
                                 </ScrollViewer>
                             </Border>
-                            <Border Grid.Row="1" Grid.Column="1" BorderBrush="Black" BorderThickness="1">
+                            <Border Grid.Row="1" Grid.Column="1" BorderBrush="Black" BorderThickness="0.5">
                                 <Grid Margin="0,10,0,0">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="*"/>
@@ -263,7 +263,7 @@
                                         <TextBlock x:Name="mainPageTBRight" FontFamily="Century Gothic" FontSize="25" FontWeight="Medium" TextAlignment="Justify" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Padding="10"/>
                                     </ScrollViewer>
                                     <Rectangle Fill="LightGray" IsHitTestVisible="False" Grid.Row="1"/>
-                                    <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1">
+                                    <Border Grid.Row="1" BorderBrush="Black" BorderThickness="0.5">
                                         <local:GifImage GifSource="{Binding Source={x:Static properties:Resources.eceGifImage}}" Margin="0,0,0,0"/>
                                     </Border>
                                 </Grid>
@@ -297,8 +297,8 @@
                                     <DropShadowEffect/>
                                 </TextBlock.Effect>
                             </TextBlock>
-                            <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1">
-                                <TreeView x:Name="careerTreeView" FontWeight="Medium" FontFamily="Century Gothic" FontSize="25" SelectedItemChanged="careerTreeView_SelectedItemChanged" Background="{x:Null}" Margin="0,10,0,0" BorderThickness="0"/>
+                            <Border Grid.Row="1" BorderBrush="Black" BorderThickness="0.5">
+                                <TreeView x:Name="careerTreeView" FontWeight="Medium" FontFamily="Century Gothic" FontSize="25" SelectedItemChanged="careerTreeView_SelectedItemChanged" Background="{x:Null}" BorderThickness="0" Padding="0,10,0,0"/>
                             </Border>
                         </Grid>
                         <Grid Name="careerPageGridRight" Grid.Column="1">
@@ -322,7 +322,7 @@
                                     <DropShadowEffect/>
                                 </TextBlock.Effect>
                             </TextBlock>
-                            <Rectangle Fill="LightGray" IsHitTestVisible="False" Grid.Row="1"/>
+                            <Rectangle Fill="LightGray" IsHitTestVisible="False" Grid.Row="1" Margin="0,10,0,0"/>
                             <local:GifImage Grid.Row="1" GifSource="{Binding Source={x:Static properties:Resources.eceCareerGifImage}}" Margin="0,10,0,0"/>
                             <DataGrid Grid.Row="2" IsReadOnly="True" Name="careerFinalCoursesGrid" ItemsSource="{Binding FinalCoursesList}" AutoGenerateColumns="False" FontFamily="Century Gothic" FontSize="18" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" CanUserSortColumns="False" Margin="0,10,0,0">
                                 <DataGrid.ColumnHeaderStyle>
@@ -402,7 +402,7 @@
                                     <DropShadowEffect/>
                                 </TextBlock.Effect>
                             </TextBlock>
-                            <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1">
+                            <Border Grid.Row="1" BorderBrush="Black" BorderThickness="0.5">
                                 <TreeView x:Name="programmeTreeView" FontWeight="Medium" FontFamily="Century Gothic" FontSize="25" SelectedItemChanged="programmeTreeView_SelectedItemChanged" Background="{x:Null}" BorderThickness="0" Margin="0,10,0,0"/>
                             </Border>
                         </Grid>
@@ -427,10 +427,10 @@
                                     <DropShadowEffect/>
                                 </TextBlock.Effect>
                             </TextBlock>
-                            <Rectangle Fill="LightGray" IsHitTestVisible="False" Grid.Row="1"/>
-                            <local:GifImage Grid.Row="1" GifSource="{Binding Source={x:Static properties:Resources.eceGifImage}}" Margin="0,10,0,0"/>
-                            <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1">
-                                <ScrollViewer VerticalScrollBarVisibility="Visible" Margin="0,10,0,0">
+                            <Rectangle Fill="LightGray" IsHitTestVisible="False" Grid.Row="1" Margin="0,10,0,0"/>
+                            <local:GifImage Grid.Row="1" GifSource="{Binding Source={x:Static properties:Resources.eceGifImage}}"/>
+                            <Border Grid.Row="2" BorderBrush="Black" BorderThickness="0.5" Margin="0,10,0,0">
+                                <ScrollViewer VerticalScrollBarVisibility="Visible">
                                     <TextBlock x:Name="programmePageTBRight" FontFamily="Century Gothic" FontSize="25" FontWeight="Medium" TextAlignment="Justify" TextWrapping="Wrap" Padding="10"/>
                                 </ScrollViewer>
                             </Border>
@@ -510,9 +510,9 @@
                                 <DropShadowEffect/>
                             </TextBlock.Effect>
                         </TextBlock>
-                        <TreeView Grid.Row="1" Grid.Column="0" x:Name="cseTreeView" FontWeight="Medium" FontFamily="Century Gothic" FontSize="25" Background="{x:Null}" BorderThickness="0.5,0.5,0.5,0" SelectedItemChanged="cseTreeView_SelectedItemChanged" Padding="1,1,1,1"/>
-                        <TreeView Grid.Row="1" Grid.Column="1" x:Name="eeeTreeView" FontWeight="Medium" FontFamily="Century Gothic" FontSize="25" Background="{x:Null}" BorderThickness="0.5,0.5,0.5,0" SelectedItemChanged="eeeTreeView_SelectedItemChanged" Padding="1,1,1,1" />
-                        <TreeView Grid.Row="1" Grid.Column="2" x:Name="seTreeView" FontWeight="Medium" FontFamily="Century Gothic" FontSize="25" Background="{x:Null}" BorderThickness="0.5,0.5,0.5,0" SelectedItemChanged="seTreeView_SelectedItemChanged" Padding="1,1,1,1"/>
+                        <TreeView Grid.Row="1" Grid.Column="0" x:Name="cseTreeView" FontWeight="Medium" FontFamily="Century Gothic" FontSize="25" Background="{x:Null}" BorderThickness="0" SelectedItemChanged="cseTreeView_SelectedItemChanged" Padding="1,10,1,1"/>
+                        <TreeView Grid.Row="1" Grid.Column="1" x:Name="eeeTreeView" FontWeight="Medium" FontFamily="Century Gothic" FontSize="25" Background="{x:Null}" BorderThickness="0" SelectedItemChanged="eeeTreeView_SelectedItemChanged" Padding="1,10,1,1"/>
+                        <TreeView Grid.Row="1" Grid.Column="2" x:Name="seTreeView" FontWeight="Medium" FontFamily="Century Gothic" FontSize="25" Background="{x:Null}" BorderThickness="0" SelectedItemChanged="seTreeView_SelectedItemChanged" Padding="1,10,1,1"/>
                     </Grid>
                 </Grid>
             </Border>

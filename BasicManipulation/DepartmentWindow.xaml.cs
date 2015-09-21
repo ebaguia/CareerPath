@@ -39,6 +39,11 @@ namespace BasicManipulation
             InitializeComponent();
             this.mainWindow = mainWindow;
 
+            initialise();
+        }
+
+        private void initialise()
+        {
             // Main Page init
             //
             mainPageLabelLeft.Text = CommonInternals.ECE_HEADER1;
@@ -337,11 +342,14 @@ namespace BasicManipulation
             }
             else
             {
-                Logger.Error("A single Career was not selected.");
+                Logger.Error("DepartmenWindow::learnMoreFromCareer_Click() A single Career was not selected.");
                 MessageBox.Show("Please select a Career from the list.", "Career Selection", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
+        /// <summary>
+        /// Shows the programmeWindow which will layout the Career Path.
+        /// </summary>
         private void showProgrammesWindow()
         {
             ProgrammeWindow programmeWindow = new ProgrammeWindow(this);
@@ -349,6 +357,9 @@ namespace BasicManipulation
             Hide();
         }
 
+        /// <summary>
+        /// When the Course button is clicked.
+        /// </summary>
         private void coursesButton_Click(object sender, RoutedEventArgs e)
         {
             coursePageGrid.Visibility = Visibility.Visible;
@@ -362,6 +373,9 @@ namespace BasicManipulation
             generateCoursesTreeView();
         }
 
+        /// <summary>
+        /// Generates the Courses and place them in a Treeview. The information of the Courses are taken from the database.
+        /// </summary>
         private void generateCoursesTreeView()
         {
             // Clear tree before repopulating
@@ -440,16 +454,25 @@ namespace BasicManipulation
             }
         }
 
+        /// <summary>
+        /// When a CSE course from the TreeView is selected.
+        /// </summary>
         private void cseTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             seTreeView_SelectedItemChanged(sender, e);
         }
 
+        /// <summary>
+        /// When an EEE course from the TreeView is selected.
+        /// </summary>
         private void eeeTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             seTreeView_SelectedItemChanged(sender, e);
         }
 
+        /// <summary>
+        /// When a SE course from the TreeView is selected.
+        /// </summary>
         private void seTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             TreeViewItem tvi = (TreeViewItem)e.NewValue;
@@ -492,6 +515,9 @@ namespace BasicManipulation
             }
         }
 
+        /// <summary>
+        /// When the "Learn More" button in the Programme button event is clicked.
+        /// </summary>
         private void learnMoreFromProgramme_Click(object sender, RoutedEventArgs e)
         {
             isSetCareer = false;
@@ -504,7 +530,7 @@ namespace BasicManipulation
             }
             else
             {
-                Logger.Error("A single Programme was not selected.");
+                Logger.Error("DepartmenWindow::learnMoreFromProgramme_Click() A single Programme was not selected.");
                 MessageBox.Show("Please select a Programme from the list.", "Programme Selection", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }

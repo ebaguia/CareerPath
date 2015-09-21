@@ -12,8 +12,8 @@ namespace BasicManipulation
     public class Utilities
     {
         /** http://iswwwup.com/t/bd67c699ce19/how-to-draw-an-arrow-in-wpf-programatically.html */
-        private const double _maxArrowLengthPercent = 0.3; // factor that determines how the arrow is shortened for very short lines
-        private const double _lineArrowLengthFactor = 3.73205081; // 15 degrees arrow:  = 1 / Math.Tan(15 * Math.PI / 180); 
+        private const double _maxArrowLengthPercent = 3.3; // factor that determines how the arrow is shortened for very short lines
+        private const double _lineArrowLengthFactor = 6.73205081; // 15 degrees arrow:  = 1 / Math.Tan(15 * Math.PI / 180); 
 
         public static PointCollection CreateLineWithArrowPointCollection(Point startPoint, Point endPoint, double lineWidth)
         {
@@ -41,11 +41,11 @@ namespace BasicManipulation
             // Adjust arrow thickness for very thick lines
             double arrowWidthFactor;
             if (lineWidth <= 1.5)
-                arrowWidthFactor = 3;
-            else if (lineWidth <= 2.66)
                 arrowWidthFactor = 4;
+            else if (lineWidth <= 2.66)
+                arrowWidthFactor = 5;
             else
-                arrowWidthFactor = 1.5 * lineWidth;
+                arrowWidthFactor = 2.5 * lineWidth;
 
             Vector arrowWidthVector = normalizedlineWidenVector * arrowWidthFactor;
 
